@@ -3,7 +3,7 @@ from pygame import *
 from math import *
 from random import *
 init()
-size=width,height=1000,600
+size=width,height=1024,800
 screen=display.set_mode(size)
 grav=4.4
 
