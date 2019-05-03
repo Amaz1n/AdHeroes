@@ -12,7 +12,8 @@ def menu():
     myClock = time.Clock()
     buttons=[Rect(430,200,200,60),Rect(430,300,200,60),
              Rect(430,400,200,60),Rect(430,500,200,60)]
-    vals=["game","credits","instructions"]
+    vals=["select","credits","instructions"]
+          #game
     while running:
         for evnt in event.get():
             if evnt.type==QUIT:
@@ -20,6 +21,7 @@ def menu():
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         #background image (screen.blit(..))
+        screen.fill((222,100,30))
         for i in range(len(buttons)):
             draw.rect(screen,(0,255,0),buttons[i],2)
             if buttons[i].collidepoint(mx,my):
@@ -30,6 +32,22 @@ def menu():
                 draw.rect(screen,(255,255,0),buttons[i],2)
                           
         display.flip()
+                          
+def select():
+    running = True
+    #background image
+    screen.fill((30,30,24))
+    selectbox=[Rect(x*120+170,500,100,100) for x in range(6)]
+    while running:
+        for evnt in event.get():          
+            if evnt.type == QUIT:
+                running = False
+        for i in range(len(selectbox)):
+            draw.rect(screen,(150,100,200),selectbox[i])
+                
+        if key.get_pressed()[27]: running = False
+        display.flip()
+    return "menu"
                           
                           
 running=True                          
@@ -46,8 +64,7 @@ while page != "exit":
         page = story()    
     if page == "credits":
         page = credit()
-
-
-
+    if page == "select": #select character
+        page = select()
 
 quit()
