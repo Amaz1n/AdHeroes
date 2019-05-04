@@ -37,19 +37,24 @@ def select():
     running = True
     #background image
     screen.fill((30,30,24))
-    selectbox=[Rect(x*120+170,500,100,100) for x in range(6)]
+    selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     while running:
         for evnt in event.get():          
             if evnt.type == QUIT:
                 running = False
         for i in range(len(selectbox)):
             draw.rect(screen,(150,100,200),selectbox[i])
-                
+        draw.rect(screen,(200,200,120),(270,210,500,200))#showing map
+        draw.rect(screen,(110,200,100),(120,260,50,100))
+        draw.rect(screen,(110,200,100),(870,260,50,100))
         if key.get_pressed()[27]: running = False
         display.flip()
     return "menu"
-                          
-                          
+
+def instructions():
+    running = True
+    
+    
 running=True                          
 x,y=0,0        
 page = "menu"
@@ -64,7 +69,6 @@ while page != "exit":
         page = story()    
     if page == "credits":
         page = credit()
-    if page == "select": #select character
+    if page == "select":
         page = select()
-
 quit()
