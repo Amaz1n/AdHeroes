@@ -1,8 +1,9 @@
-
 #AdHeroes
 from pygame import *
 from math import *
 from random import *
+font.init()
+courierFont=font.SysFont("Courier New",26)
 init()
 size=width,height=1024,800
 screen=display.set_mode(size)
@@ -13,6 +14,7 @@ def menu():
     myClock = time.Clock()
     buttons=[Rect(430,200,200,60),Rect(430,300,200,60),
              Rect(430,400,200,60),Rect(430,500,200,60)]
+    
     vals=["select","credits","instructions"]
           #game
     while running:
@@ -23,6 +25,17 @@ def menu():
         mb=mouse.get_pressed()
         #background image (screen.blit(..))
         screen.fill((222,100,30))
+        
+        #doing text
+        button1=courierFont.render("Button 1",True,(255,255,255))
+        screen.blit(button1,(470,218))
+        button2=courierFont.render("Button 2",True,(255,255,255))
+        screen.blit(button2,(470,318))
+        button3=courierFont.render("Button 3",True,(255,255,255))
+        screen.blit(button3,(470,418))
+        button4=courierFont.render("Button 4",True,(255,255,255))
+        screen.blit(button4,(470,518))
+        
         for i in range(len(buttons)):
             draw.rect(screen,(0,255,0),buttons[i],2)
             if buttons[i].collidepoint(mx,my):
