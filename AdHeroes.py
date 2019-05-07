@@ -61,16 +61,16 @@ def select():
     screen.blit(selecttext,(335,30))
     #####
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
+    startRect=Rect(350,620,350,150)#start game button
     mapRect=Rect(270,210,500,200)
     rightRect=Rect(870,260,61,81)
     leftRect=Rect(120,260,61,81)
     draw.rect(screen,(200,200,120),mapRect)#showing map
     draw.rect(screen,(110,200,100),leftRect)
     draw.rect(screen,(110,200,100),rightRect)
+    draw.rect(screen,(30,30,150),startRect)#start game button
     screen.blit(right,(870,260))
     screen.blit(left,(120,260))
-    '''using textures.py for showing and changing map
-    '''
     while running:
         click=False
         for evnt in event.get():          
@@ -84,12 +84,13 @@ def select():
         mx,my=mouse.get_pos()
         for i in range(len(selectbox)):
             draw.rect(screen,(150,100,200),selectbox[i])
-        
         if key.get_pressed()[27]: running = False
         if mb[0]==1 and rightRect.collidepoint(mx,my) and click:
             mapPos=(mapPos+1)%len(mapList)
         if mb[0]==1 and leftRect.collidepoint(mx,my) and click:
             mapPos=(mapPos-1)%len(mapList)
+        if mb[0]==1 and startRect.collidepoint(mx,my) and click:
+            return "game"
         #resize the map as mapRect size
         screen.blit(mapList[mapPos],(270,210))
         display.flip()
