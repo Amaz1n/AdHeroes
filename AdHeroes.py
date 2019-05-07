@@ -27,12 +27,12 @@ def menu():
         screen.fill((222,100,30))
         
         #doing text
-        button1=courierFont.render("Button 1",True,(255,255,255))
-        screen.blit(button1,(470,218))
-        button2=courierFont.render("Button 2",True,(255,255,255))
-        screen.blit(button2,(470,318))
-        button3=courierFont.render("Button 3",True,(255,255,255))
-        screen.blit(button3,(470,418))
+        gametext=courierFont.render("Game",True,(255,255,255))
+        screen.blit(gametext,(495,218))
+        credittext=courierFont.render("Credit",True,(255,255,255))
+        screen.blit(credittext,(485,318))
+        instructiontext=courierFont.render("Instruction",True,(255,255,255))
+        screen.blit(instructiontext,(445,418))
         button4=courierFont.render("Button 4",True,(255,255,255))
         screen.blit(button4,(470,518))
         
@@ -48,32 +48,47 @@ def menu():
         display.flip()
                           
 def select():
+    right=image.load("rightarrow.png")
+    left=image.load("leftarrow.png")
     running = True
     mapPos=0
-    mapList=[]#we need to add map
+    mapList=[image.load("back1.png"),image.load("back2.png"),image.load("back3.png")]#we need to add map
     #background image
     screen.fill((30,30,24))
+    #####text
+    comicFont=font.SysFont("Comic Sans MS",100)
+    selecttext=comicFont.render("SELECT",True,(255,255,255))
+    screen.blit(selecttext,(335,30))
+    #####
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     mapRect=Rect(270,210,500,200)
-    rightRect=Rect(870,260,50,100)
-    leftRect=Rect(120,260,50,100)
+    rightRect=Rect(870,260,61,81)
+    leftRect=Rect(120,260,61,81)
+    draw.rect(screen,(200,200,120),mapRect)#showing map
+    draw.rect(screen,(110,200,100),leftRect)
+    draw.rect(screen,(110,200,100),rightRect)
+    screen.blit(right,(870,260))
+    screen.blit(left,(120,260))
     '''using textures.py for showing and changing map
     '''
     while running:
+        click=False
         for evnt in event.get():          
             if evnt.type == QUIT:
                 running = False
+            if evnt.type == MOUSEBUTTONDOWN:
+                click = True
+            if evnt.type == MOUSEBUTTONUP:
+                click = False
         mb=mouse.get_pressed()
         mx,my=mouse.get_pos()
         for i in range(len(selectbox)):
             draw.rect(screen,(150,100,200),selectbox[i])
-        draw.rect(screen,(200,200,120),mapRect)#showing map
-        draw.rect(screen,(110,200,100),leftRect)
-        draw.rect(screen,(110,200,100),rightRect)
+        
         if key.get_pressed()[27]: running = False
-        if mb[0]==1 and rightRect.collidepoint(mx,my):
+        if mb[0]==1 and rightRect.collidepoint(mx,my) and click:
             mapPos=(mapPos+1)%len(mapList)
-        if mb[0]==1 and leftRect.collidepoint(mx,my):
+        if mb[0]==1 and leftRect.collidepoint(mx,my) and click:
             mapPos=(mapPos-1)%len(mapList)
         #resize the map as mapRect size
         screen.blit(mapList[mapPos],(270,210))
