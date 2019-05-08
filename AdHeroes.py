@@ -47,6 +47,8 @@ def menu():
         display.flip()
                           
 def select():
+    player1="A"
+    player2="A"
     right=image.load("rightarrow.png")
     left=image.load("leftarrow.png")
     right2=image.load("rightarrow2.png")
@@ -56,6 +58,7 @@ def select():
     mapList=[image.load("back1.png"),image.load("back2.png"),image.load("back3.png")]#we need to add map
     #background image
     screen.fill((30,30,24))
+    chaList=["A","B","C","D","E","F"]#character name
     
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     startRect=Rect(350,620,350,150)#start game button
@@ -69,7 +72,7 @@ def select():
     selecttext=largeFont.render("SELECT",True,(255,255,255))
     screen.blit(selecttext,(335,30))
     readytext=largeFont.render("READY",True,(255,255,255))
-    screen.blit(readytext,(357,625))
+    screen.blit(readytext,(375,635))
     #####
     while running:
         click=False
@@ -88,16 +91,16 @@ def select():
 
         draw.rect(screen,(30,30,24),leftRect)
         draw.rect(screen,(30,30,24),rightRect)
-        screen.blit(right,(870,270))
-        screen.blit(left,(120,270))
+        #screen.blit(right,(870,270))
+        #screen.blit(left,(120,270))
         
         #hovering over buttons
         if rightRect.collidepoint(mx,my):
-            screen.blit(right2,(870,270))
+            screen.blit(right2,(863,270))
             if mb[0]==1 and click:
                 mapPos=(mapPos+1)%len(mapList)
         if leftRect.collidepoint(mx,my):
-            screen.blit(left2,(120,270))
+            screen.blit(left2,(118,270))
             if mb[0]==1 and click:
                 mapPos=(mapPos-1)%len(mapList)
         
@@ -109,6 +112,14 @@ def select():
             draw.rect(screen,(255,255,0),startRect,2)
         #resize the map as mapRect size
         screen.blit(mapList[mapPos],(270,210))
+        #selecting character
+        for i in range(len(selectbox)):
+            if selectbox[i].collidepoint(mx,my) and mb[0]==1 and click:
+                player1=chaList[i]#chose character
+                print(player1)
+            if selectbox[i].collidepoint(mx,my) and mb[2]==1 and click:
+                player2=chaList[i]#chose character
+                print(player2)
         display.flip()
     return "menu"
 
@@ -142,7 +153,7 @@ while page != "exit":
     if page == "menu":
         page = menu()
     if page == "game":
-        page = simpleGame()    
+        page = game()    
     if page == "instructions":
         page = instructions()       
     if page == "credits":
