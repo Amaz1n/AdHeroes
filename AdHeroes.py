@@ -3,7 +3,7 @@ from pygame import *
 from math import *
 from random import *
 font.init()
-courierFont=font.SysFont("Courier New",26)
+courierFont=font.SysFont("Courier New",25)
 init()
 size=width,height=1024,800
 screen=display.set_mode(size)
@@ -26,13 +26,13 @@ def menu():
         #background image (screen.blit(..))
         screen.fill((222,100,30))
         
-        #doing text
+        #button text
         gametext=courierFont.render("Game",True,(255,255,255))
         screen.blit(gametext,(495,218))
-        credittext=courierFont.render("Credit",True,(255,255,255))
+        credittext=courierFont.render("Credits",True,(255,255,255))
         screen.blit(credittext,(485,318))
-        instructiontext=courierFont.render("Instruction",True,(255,255,255))
-        screen.blit(instructiontext,(445,418))
+        instructiontext=courierFont.render("Instructions",True,(255,255,255))
+        screen.blit(instructiontext,(444,418))
         button4=courierFont.render("Button 4",True,(255,255,255))
         screen.blit(button4,(470,518))
         
@@ -44,12 +44,13 @@ def menu():
                     return vals[i]
             else:
                 draw.rect(screen,(255,255,0),buttons[i],2)
-                          
         display.flip()
                           
 def select():
     right=image.load("rightarrow.png")
     left=image.load("leftarrow.png")
+    right2=image.load("rightarrow2.png")
+    left2=image.load("leftarrow2.png")
     running = True
     mapPos=0
     mapList=[image.load("back1.png"),image.load("back2.png"),image.load("back3.png")]#we need to add map
@@ -62,16 +63,12 @@ def select():
     rightRect=Rect(870,260,61,81)
     leftRect=Rect(120,260,61,81)
     draw.rect(screen,(200,200,120),mapRect)#showing map
-    draw.rect(screen,(110,200,100),leftRect)
-    draw.rect(screen,(110,200,100),rightRect)
     draw.rect(screen,(30,30,150),startRect)#start game button
-    screen.blit(right,(870,260))
-    screen.blit(left,(120,260))
     #####text
-    comicFont=font.SysFont("Comic Sans MS",100)
-    selecttext=comicFont.render("SELECT",True,(255,255,255))
+    largeFont=font.SysFont("Courier New",100)
+    selecttext=largeFont.render("SELECT",True,(255,255,255))
     screen.blit(selecttext,(335,30))
-    readytext=comicFont.render("READY",True,(255,255,255))
+    readytext=largeFont.render("READY",True,(255,255,255))
     screen.blit(readytext,(357,625))
     #####
     while running:
@@ -88,10 +85,22 @@ def select():
         for i in range(len(selectbox)):
             draw.rect(screen,(150,100,200),selectbox[i])
         if key.get_pressed()[27]: running = False
-        if mb[0]==1 and rightRect.collidepoint(mx,my) and click:
-            mapPos=(mapPos+1)%len(mapList)
-        if mb[0]==1 and leftRect.collidepoint(mx,my) and click:
-            mapPos=(mapPos-1)%len(mapList)
+
+        draw.rect(screen,(30,30,24),leftRect)
+        draw.rect(screen,(30,30,24),rightRect)
+        screen.blit(right,(870,270))
+        screen.blit(left,(120,270))
+        
+        #hovering over buttons
+        if rightRect.collidepoint(mx,my):
+            screen.blit(right2,(870,270))
+            if mb[0]==1 and click:
+                mapPos=(mapPos+1)%len(mapList)
+        if leftRect.collidepoint(mx,my):
+            screen.blit(left2,(120,270))
+            if mb[0]==1 and click:
+                mapPos=(mapPos-1)%len(mapList)
+        
         if mb[0]==1 and startRect.collidepoint(mx,my) and click:
             return "game"
         if startRect.collidepoint(mx,my):
