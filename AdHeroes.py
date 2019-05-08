@@ -55,11 +55,7 @@ def select():
     mapList=[image.load("back1.png"),image.load("back2.png"),image.load("back3.png")]#we need to add map
     #background image
     screen.fill((30,30,24))
-    #####text
-    comicFont=font.SysFont("Comic Sans MS",100)
-    selecttext=comicFont.render("SELECT",True,(255,255,255))
-    screen.blit(selecttext,(335,30))
-    #####
+    
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     startRect=Rect(350,620,350,150)#start game button
     mapRect=Rect(270,210,500,200)
@@ -71,6 +67,13 @@ def select():
     draw.rect(screen,(30,30,150),startRect)#start game button
     screen.blit(right,(870,260))
     screen.blit(left,(120,260))
+    #####text
+    comicFont=font.SysFont("Comic Sans MS",100)
+    selecttext=comicFont.render("SELECT",True,(255,255,255))
+    screen.blit(selecttext,(335,30))
+    readytext=comicFont.render("READY",True,(255,255,255))
+    screen.blit(readytext,(357,625))
+    #####
     while running:
         click=False
         for evnt in event.get():          
@@ -91,6 +94,10 @@ def select():
             mapPos=(mapPos-1)%len(mapList)
         if mb[0]==1 and startRect.collidepoint(mx,my) and click:
             return "game"
+        if startRect.collidepoint(mx,my):
+            draw.rect(screen,(0,0,255),startRect,2)
+        else:
+            draw.rect(screen,(255,255,0),startRect,2)
         #resize the map as mapRect size
         screen.blit(mapList[mapPos],(270,210))
         display.flip()
@@ -118,6 +125,7 @@ def credit():
         if key.get_pressed()[27]: running = False
         display.flip()
     return "menu"
+#def game():
 running=True                          
 x,y=0,0        
 page = "menu"
