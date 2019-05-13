@@ -49,6 +49,8 @@ def menu():
 def select():
     player1="A"
     player2="A"
+    right=image.load("rightarrow.png")
+    left=image.load("leftarrow.png")
     right2=image.load("rightarrow2.png")
     left2=image.load("leftarrow2.png")
     running = True
@@ -57,11 +59,12 @@ def select():
     #background image
     screen.fill((30,30,24))
     chaList=["A","B","C","D","E","F"]#character name
+    
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     startRect=Rect(350,620,350,150)#start game button
     mapRect=Rect(270,210,500,200)
-    rightRect=Rect(870,260,61,81)
-    leftRect=Rect(120,260,61,81)
+    rightRect=Rect(870,260,63,81)
+    leftRect=Rect(124,260,63,81)
     draw.rect(screen,(200,200,120),mapRect)#showing map
     draw.rect(screen,(30,30,150),startRect)#start game button
     #####text
@@ -88,18 +91,21 @@ def select():
 
         draw.rect(screen,(30,30,24),leftRect)
         draw.rect(screen,(30,30,24),rightRect)
-
+        screen.blit(right,(870,270))
+        screen.blit(left,(120,270))
+        
         #hovering over buttons
         if rightRect.collidepoint(mx,my):
-            screen.blit(right2,(863,270))
+            draw.rect(screen,(30,30,24),rightRect)
+            screen.blit(right2,(874,270))
             if mb[0]==1 and click:
                 mapPos=(mapPos+1)%len(mapList)
-                
         if leftRect.collidepoint(mx,my):
-            screen.blit(left2,(118,270))
+            draw.rect(screen,(30,30,24),leftRect)
+            screen.blit(left2,(122,270))
             if mb[0]==1 and click:
                 mapPos=(mapPos-1)%len(mapList)
-                
+        
         if mb[0]==1 and startRect.collidepoint(mx,my) and click:
             return "game"
         if startRect.collidepoint(mx,my):
