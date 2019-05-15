@@ -190,8 +190,8 @@ def moveGuy1(player):
     elif keys[K_LEFT]:
         newMove=3
         player[0]-=2
-##    elif keys[K_SHIFT]
-##    elif keys[K_CTRL]
+##    elif keys[K_c]
+##    elif keys[K_v]
     else:
         frame=0 #0 is the "idle" frame (standing pose)
 
