@@ -3,42 +3,60 @@ from math import *
 from random import *
 screen=display.set_mode((1050,800))
 WHITE=(255,255,255)
+BLUE=(0,0,255)
 RED=(255,0,0)
 
 p1Rect=Rect(200,700,64,64)
 p1=[200,700,0,True]
-
-X1=0
-Y1=1
-VY1=2
-jump1=3
+p2Rect=Rect(300,700,64,64)
+p2=[300,700,0,True]
+X=0
+Y=1
+VY=2
+ONGROUND=3
 
 
 
 def drawScene(screen,pr):
     screen.fill(WHITE)
-    hitbox1=draw.rect(screen,RED,p1Rect)
+    hitbox1=draw.rect(screen,RED,(p1[X],p1[Y],64,64))
+    hitbox2=draw.rect(screen,BLUE,(p2[X],p2[Y],64,64))
     display.flip()
 
 def moveP1(pr):
     keys=key.get_pressed()
-    if keys[K_LEFT] and p1[X1]>=0:
-        p1[X1]-=3
-    if keys[K_RIGHT] and p1[X1]<=986:
-        p1[X1]+=3
-    if keys[K_UP] and p1[jump1]:
-        p1[VY1]=-4
-        p1[jump1]=False
+    if keys[K_LEFT] and pr[X]>=0:
+        pr[X]-=3
+    if keys[K_RIGHT] and pr[X]<=986:
+        pr[X]+=3
+    if keys[K_UP] and pr[ONGROUND]:
+        pr[VY]=-4
+        pr[ONGROUND]=False
+    pr[Y]+=pr[VY]
+    if pr[Y]>=700:
+        pr[Y]=700
+        pr[VY]=0
+        pr[ONGROUND]=True
+    pr[VY]+=0.2
+    print(pr)
 
-    p1[Y1]+=p1[VY1]
-    if p1[Y1]>=700:
-        p1[Y1]=700
-        p1[VY1]=0
-    p1[VY1]+=0.2
-    print(p1)  
     
-    
-    
+def moveP2(pr):
+    keys=key.get_pressed()
+    if keys[K_a] and pr[X]>=0:
+        pr[X]-=3
+    if keys[K_d] and pr[X]<=986:
+        pr[X]+=3
+    if keys[K_w] and pr[ONGROUND]:
+        pr[VY]=-4
+        pr[ONGROUND]=False
+    pr[Y]+=pr[VY]
+    if pr[Y]>=700:
+        pr[Y]=700
+        pr[VY]=0
+        pr[ONGROUND]=True
+    pr[VY]+=0.2
+    print(pr)
 
 
 
@@ -49,12 +67,10 @@ while running:
         if evt.type==QUIT:
             running=False
             
-            
-            
-    
   
     drawScene(screen,p1)
+    drawScene(screen,p2)
     moveP1(p1)
+    moveP2(p2)
 
 quit()
-
