@@ -49,6 +49,8 @@ def menu():
 def select():
     player1="A"
     player2="A"
+    right=image.load("rightarrow.png")
+    left=image.load("leftarrow.png")
     right2=image.load("rightarrow2.png")
     left2=image.load("leftarrow2.png")
     running = True
@@ -89,7 +91,8 @@ def select():
 
         draw.rect(screen,(30,30,24),leftRect)
         draw.rect(screen,(30,30,24),rightRect)
-        
+        screen.blit(right,(870,270))#DO NOT DELETE THIS PLS
+        screen.blit(left,(120,270))
         
         #hovering over buttons
         if rightRect.collidepoint(mx,my):
@@ -124,7 +127,7 @@ def select():
 
 def instructions():
     running = True
-    instruction=image.load("instruction.png") #load picture
+    instruction=image.load("instructions.png") #load picture
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
@@ -187,8 +190,8 @@ def moveGuy1(player):
     elif keys[K_LEFT]:
         newMove=3
         player[0]-=2
-##    elif keys[K_c]
-##    elif keys[K_v]
+##    elif keys[K_SHIFT]
+##    elif keys[K_CTRL]
     else:
         frame=0 #0 is the "idle" frame (standing pose)
 
