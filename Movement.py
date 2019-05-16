@@ -72,5 +72,5 @@ while running:
     drawScene(screen,p2)
     moveP1(p1)
     moveP2(p2)
-
+    myclock.tick(60)
 quit()
