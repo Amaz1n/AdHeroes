@@ -55,7 +55,8 @@ def select():
     left2=image.load("leftarrow2.png")
     running = True
     mapPos=0
-    mapList=[image.load("back1.png"),image.load("back2.png"),image.load("back3.png")]#we need to add map
+    back3=image.load("back3.png")
+    mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#we need to add map
     #background image
     screen.fill((30,30,24))
     chaList=["A","B","C","D","E","F"]#character name
@@ -118,10 +119,10 @@ def select():
         for i in range(len(selectbox)):
             if selectbox[i].collidepoint(mx,my) and mb[0]==1 and click:
                 player1=chaList[i]#chose character
-                print(player1)
+                print("p1",player1)
             if selectbox[i].collidepoint(mx,my) and mb[2]==1 and click:
                 player2=chaList[i]#chose character
-                print(player2)
+                print("p2",player2)
         display.flip()
     return "menu"
 
