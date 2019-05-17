@@ -45,7 +45,7 @@ def menu():
             else:
                 draw.rect(screen,(255,255,0),buttons[i],2)
         display.flip()
-                          
+mapPos=0
 def select():
     player1="A"
     player2="A"
@@ -54,13 +54,13 @@ def select():
     right2=image.load("rightarrow2.png")
     left2=image.load("leftarrow2.png")
     running = True
-    mapPos=0
-    back3=image.load("back3.png")
+    global mapPos
+    #resize "back3 picture" as mapRect"
+    back3=image.load("back3.png")                               #resize "back3 picture" as mapRect"
     mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#we need to add map
     #background image
     screen.fill((30,30,24))
     chaList=["A","B","C","D","E","F"]#character name
-    
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     startRect=Rect(350,620,350,150)#start game button
     mapRect=Rect(270,210,500,200)
@@ -149,27 +149,25 @@ def credit():
         display.flip()
     return "menu"
 def game():
-    X=0
-    Y=1
-    p1=[70,0]
-    p2=[980,0]
     running = True
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
         if key.get_pressed()[27]: running = False
-        moveGuy(p1)########
-        moveGuy(p2)########
-        drawScene(screen,pics1,pics2,player1,player2)
+        #moveGuy(p1)########
+        #moveGuy(p2)########
+        drawScene(screen)
+    return "select"
 
-def drawScene(screen,picList1,picList2,player1,player2):
-    realmap=[]# add real size map
+def drawScene(screen):
+    global mapPos
+    realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
     screen.blit(realmap[mapPos])
-    pic1=picList1[move][int(frame)]
-    pic2=picList2[move][int(frame)]
-    screen.blit(pic1,(player1[X],player[Y]))
-    screen.blit(pic2,(player2[X],player[Y]))
+    #pic1=picList1[move][int(frame)]
+    #pic2=picList2[move][int(frame)]
+    #screen.blit(pic1,(player1[X],player[Y]))
+    #screen.blit(pic2,(player2[X],player[Y]))
     display.flip()
 '''
 We need to have moveGuy for player 1 and player 2
