@@ -12,9 +12,9 @@ p2Rect=Rect(300,700,64,64)
 p2=[300,700,0,True]
 X=0
 Y=1
+grav=4
 VY=2
-ONGROUND=3
-
+CANJUMP=3
 
 
 def drawScene(screen,pr):
@@ -29,36 +29,36 @@ def moveP1(pr):
         pr[X]-=3
     if keys[K_RIGHT] and pr[X]<=986:
         pr[X]+=3
-    if keys[K_UP] and pr[ONGROUND]:
+    if keys[K_UP] and pr[CANJUMP]:
         pr[VY]=-4
-        pr[ONGROUND]=False
+        if pr[VY]<=0:#going up
+            pr[CANJUMP]=False
+        elif pr[VY]>=0:#going down
+            pr[CANJUMP]=True
     pr[Y]+=pr[VY]
     if pr[Y]>=700:
         pr[Y]=700
         pr[VY]=0
-        pr[ONGROUND]=True
+        pr[CANJUMP]=True
     pr[VY]+=0.2
     print(pr)
 
-    
 def moveP2(pr):
     keys=key.get_pressed()
     if keys[K_a] and pr[X]>=0:
         pr[X]-=3
     if keys[K_d] and pr[X]<=986:
         pr[X]+=3
-    if keys[K_w] and pr[ONGROUND]:
+    if keys[K_w] and pr[CANJUMP]:
         pr[VY]=-4
-        pr[ONGROUND]=False
+        pr[CANJUMP]=False
     pr[Y]+=pr[VY]
     if pr[Y]>=700:
         pr[Y]=700
         pr[VY]=0
-        pr[ONGROUND]=True
+        pr[CANJUMP]=True
     pr[VY]+=0.2
     print(pr)
-
-
 
 myclock=time.Clock()       
 running=True
@@ -66,8 +66,7 @@ while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
-            
-  
+
     drawScene(screen,p1)
     drawScene(screen,p2)
     moveP1(p1)
