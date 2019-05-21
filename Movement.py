@@ -7,15 +7,14 @@ BLUE=(0,0,255)
 RED=(255,0,0)
 
 p1Rect=Rect(200,700,64,64)
-p1=[200,700,0,True]
+p1=[200,700,0,True,True]
 p2Rect=Rect(300,700,64,64)
-p2=[300,700,0,True]
+p2=[300,700,0,True,True]
 X=0
 Y=1
-grav=4
 VY=2
-CANJUMP=3
-
+GODOWN=3
+DOUBLE=4
 
 def drawScene(screen,pr):
     screen.fill(WHITE)
@@ -29,17 +28,20 @@ def moveP1(pr):
         pr[X]-=3
     if keys[K_RIGHT] and pr[X]<=986:
         pr[X]+=3
-    if keys[K_UP] and pr[CANJUMP]:
+    if keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
         pr[VY]=-4
-        if pr[VY]<=0:#going up
-            pr[CANJUMP]=False
-        elif pr[VY]>=0:#going down
-            pr[CANJUMP]=True
+        if pr[Y]<700:
+            pr[DOUBLE]=False
+    if pr[VY]<=0:#going up
+        pr[GODOWN]=False
+    elif pr[VY]>=0:#going down
+        pr[GODOWN]=True
     pr[Y]+=pr[VY]
     if pr[Y]>=700:
         pr[Y]=700
         pr[VY]=0
-        pr[CANJUMP]=True
+        pr[GODOWN]=True
+        pr[DOUBLE]=True
     pr[VY]+=0.2
     print(pr)
 
@@ -49,14 +51,20 @@ def moveP2(pr):
         pr[X]-=3
     if keys[K_d] and pr[X]<=986:
         pr[X]+=3
-    if keys[K_w] and pr[CANJUMP]:
+    if keys[K_w] and pr[GODOWN] and pr[DOUBLE]:
         pr[VY]=-4
-        pr[CANJUMP]=False
+        if pr[Y]<700:
+            pr[DOUBLE]=False
+    if pr[VY]<=0:#going up
+        pr[GODOWN]=False
+    elif pr[VY]>=0:#going down
+        pr[GODOWN]=True
     pr[Y]+=pr[VY]
     if pr[Y]>=700:
         pr[Y]=700
         pr[VY]=0
-        pr[CANJUMP]=True
+        pr[GODOWN]=True
+        pr[DOUBLE]=True
     pr[VY]+=0.2
     print(pr)
 
