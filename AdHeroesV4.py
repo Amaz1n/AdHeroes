@@ -159,9 +159,9 @@ def game():
             if evnt.type == QUIT:
                 running = False
         if key.get_pressed()[27]: running = False
-        moveGuy(p1)########
-        moveGuy(p2)########
-        drawScene(screen,pics1,pics2,player1,player2)
+        #moveGuy(p1)########
+        #moveGuy(p2)########
+        drawScene(screen,pics1,pics2,player1,player2)#What is pic1 pic2?
 
 def drawScene(screen,picList1,picList2,player1,player2):
     realmap=[]# add real size map
@@ -202,7 +202,7 @@ def moveGuy1(player):
             frame=1#restarting at frame 1 (0 - standing 1-5 is walking)
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move=newMove
-        frame=1 
+        frame=1
 
 move=0            
 frame=0
@@ -234,7 +234,7 @@ def moveGuy2(player):
             frame=1#restarting at frame 1 (0 - standing 1-5 is walking)
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move=newMove
-        frame=1 
+        frame=1
 
 move=0            
 frame=0 
@@ -245,7 +245,7 @@ while page != "exit":
     if page == "menu":
         page = menu()
     if page == "game":
-        page = game()    
+        page = game()
     if page == "instructions":
         page = instructions()       
     if page == "credits":
