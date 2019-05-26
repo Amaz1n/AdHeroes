@@ -40,8 +40,8 @@ def menu():
         screen.blit(credittext,(480,318))
         instructiontext=courierFont.render("Instructions",True,(255,255,255))
         screen.blit(instructiontext,(444,418))
-        button4=courierFont.render("Button 4",True,(255,255,255))
-        screen.blit(button4,(470,518))
+        button4=courierFont.render("Quit",True,(255,255,255))
+        screen.blit(button4,(500,518))
         
         for i in range(len(buttons)):
             draw.rect(screen,(0,255,0),buttons[i],2)
@@ -146,12 +146,13 @@ def instructions():
     return "menu"
 
 def credit():
+    creditPic=image.load("credits.png")
     running = True
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
-        #screen.blit()#blit the credit picture
+        screen.blit(creditPic,(0,0))#blit the credit picture
         if key.get_pressed()[27]: running = False
         display.flip()
     return "menu"
@@ -286,7 +287,7 @@ def game():
                 running = False
         if key.get_pressed()[27]: running = False
         moveGuy1(p1)########
-        #moveGuy(p2)########
+        #moveGuy2(p2)########
         drawScene(screen,pics)
         myclock.tick(60)
     return "select"
