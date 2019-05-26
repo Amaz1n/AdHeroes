@@ -21,7 +21,7 @@ def menu():
     myClock = time.Clock()
     buttons=[Rect(430,200,200,60),Rect(430,300,200,60),
              Rect(430,400,200,60),Rect(430,500,200,60)]
-    
+    mainBack=image.load("Start screen.png")
     vals=["select","credits","instructions"]
           #game
     while running:
@@ -31,7 +31,7 @@ def menu():
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         #background image (screen.blit(..))
-        screen.fill((222,100,30))
+        screen.blit(mainBack,(0,0))
         
         #button text
         gametext=courierFont.render("Game",True,(255,255,255))
