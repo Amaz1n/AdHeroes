@@ -183,23 +183,25 @@ def moveGuy1(pr):
     if keys[K_RIGHT] and pr[X]<=986:
         newMove=2
         pr[X]+=3
-    elif keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
-        print("jump")
-        newMove=3
-        pr[VY]=-4
-        if pr[Y]<700:
-            pr[DOUBLE]=False
+    
     if keys[K_DOWN]:
         newMove=1
         pr[Y]+=2
-    if keys[K_LEFT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
+    
+
+    if keys[K_RIGHT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
+        newMove=5
+        pr[VY]=-4
+        if pr[Y]<700:
+            pr[DOUBLE]=False
+    elif keys[K_LEFT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
         newMove=4
         pr[VY]=-4
         if pr[Y]<700:
             pr[DOUBLE]=False
-
-    if keys[K_RIGHT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
-        newMove=5
+    elif keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
+        print("jump")
+        newMove=3
         pr[VY]=-4
         if pr[Y]<700:
             pr[DOUBLE]=False
