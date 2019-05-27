@@ -7,14 +7,15 @@ courierFont=font.SysFont("Courier New",25)
 init()
 size=width,height=1024,800
 screen=display.set_mode(size)
-grav=4.4
 X=0
 Y=1
 VY=2
 GODOWN=3
 DOUBLE=4
 p1=[500,700,0,True,True]
+p1Rect=Rect(200,700,64,64)
 p2=[300,700,0,True,True]
+p2Rect=Rect(300,700,64,64)
 myclock=time.Clock()
 def menu():
     running = True
@@ -174,26 +175,26 @@ move and frame also should have one for each player
 '''
 def moveGuy1(pr):
     global move,frame
-    newMove=-1
+    #newMove=-1
     keys=key.get_pressed()
     if keys[K_LEFT] and pr[X]>=0:
-        newMove=1
+        #newMove=1
         pr[X]-=3
     elif keys[K_RIGHT] and pr[X]<=986:
-        newMove=2
+        #newMove=2
         pr[X]+=3
     elif keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
         print("jump")
-        newMove=3
+        #newMove=3
         pr[VY]=-4
         if pr[Y]<700:
             pr[DOUBLE]=False
     elif keys[K_DOWN]:
-        newMove=1
+        #newMove=1
         pr[Y]+=2
     else:
         frame=0 #0 is the "idle" frame (standing pose)
-        
+
     if pr[VY]<=0:#going up
         pr[GODOWN]=False
     elif pr[VY]>=0:#going down
@@ -210,7 +211,7 @@ def moveGuy1(pr):
 ##    elif keys[K_SHIFT]
 ##    elif keys[K_CTRL]
     
-
+'''
     if move==newMove:
         frame=frame+0.2
         print(frame)
@@ -219,7 +220,7 @@ def moveGuy1(pr):
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move=newMove
         frame=1
-        print("start")
+        print("start")'''
 
 move=0            
 frame=0
