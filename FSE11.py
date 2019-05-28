@@ -7,23 +7,22 @@ courierFont=font.SysFont("Courier New",25)
 init()
 size=width,height=1024,800
 screen=display.set_mode(size)
+grav=4.4
 X=0
 Y=1
 VY=2
 GODOWN=3
 DOUBLE=4
 p1=[500,700,0,True,True]
-p1Rect=Rect(200,700,64,64)
 p2=[300,700,0,True,True]
-p2Rect=Rect(300,700,64,64)
 myclock=time.Clock()
 def menu():
     running = True
     myClock = time.Clock()
     buttons=[Rect(430,200,200,60),Rect(430,300,200,60),
              Rect(430,400,200,60),Rect(430,500,200,60)]
-    #mainBack=image.load("Start screen.png")
-    vals=["select","credits","instructions","quit"]
+    mainBack=image.load("Start screen.png")
+    vals=["select","credits","instructions"]
           #game
     while running:
         for evnt in event.get():
@@ -32,7 +31,7 @@ def menu():
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         #background image (screen.blit(..))
-        #screen.blit(mainBack,(0,0))
+        screen.blit(mainBack,(0,0))
         
         #button text
         gametext=courierFont.render("Game",True,(255,255,255))
@@ -180,40 +179,27 @@ def moveGuy1(pr):
     if keys[K_LEFT] and pr[X]>=0:
         newMove=1
         pr[X]-=3
-    if keys[K_RIGHT] and pr[X]<=986:
+    elif keys[K_RIGHT] and pr[X]<=986:
         newMove=2
         pr[X]+=3
-    
-    if keys[K_DOWN]:
-        newMove=1
-        pr[Y]+=2
-    
-
-    if keys[K_RIGHT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
-        newMove=5
-        pr[VY]=-4
-        if pr[Y]<700:
-            pr[DOUBLE]=False
-    elif keys[K_LEFT] and pr[X]>=0 and keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
-        newMove=4
-        pr[VY]=-4
-        if pr[Y]<700:
-            pr[DOUBLE]=False
     elif keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
         print("jump")
         newMove=3
         pr[VY]=-4
         if pr[Y]<700:
             pr[DOUBLE]=False
-        
+    elif keys[K_DOWN]:
+        newMove=1
+        pr[Y]+=2
     else:
         frame=0 #0 is the "idle" frame (standing pose)
-
+        
     if pr[VY]<=0:#going up
         pr[GODOWN]=False
     elif pr[VY]>=0:#going down
         pr[GODOWN]=True
     pr[Y]+=pr[VY]
+    print(pr[Y])
     if pr[Y]>=700:
         pr[Y]=700
         pr[VY]=0
@@ -227,6 +213,7 @@ def moveGuy1(pr):
 
     if move==newMove:
         frame=frame+0.2
+        print(frame)
         if frame>=len(pics[move]):
             frame=1#restarting at frame 1 (0 - standing 1-5 is walking)
     elif newMove!=-1:#this is the MOMENT we START WALKING
@@ -288,11 +275,9 @@ def addPics(name,start,end):
     return mypic         
 pics=[]
 pics.append(addPics("robotIdle",0,0))
-pics.append(addPics("robotIdle",1,2))#left
-pics.append(addPics("robotIdle",3,4))#right
-pics.append(addPics("robotIdle",5,6))#jump
-pics.append(addPics("robotIdle",7,8))#jump left
-pics.append(addPics("robotIdle",9,10))#jump right
+pics.append(addPics("robotIdle",1,2))
+pics.append(addPics("robotIdle",3,4))
+pics.append(addPics("robotIdle",5,6))
 
 def game():
     running = True
