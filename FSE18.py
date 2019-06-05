@@ -77,7 +77,7 @@ def select():
     mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#we need to add map
     #background image
     screen.fill((30,30,24))
-    chaList=["Robot","Boomber","Mcman","Recycle bin","E","F"]#character name
+    chaList=["Robot","Boomber","Mcman","Recycle bin","Slime","F"]#character name
     selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
     startRect=Rect(350,620,350,150)#start game button
     mapRect=Rect(270,210,500,200)
@@ -92,8 +92,18 @@ def select():
     readytext=largeFont.render("READY",True,(255,255,255))
     screen.blit(readytext,(375,635))
     smallFont=font.SysFont("Courier New",20)
-    Atext=smallFont.render("robot",True,(255,255,255))
-    screen.blit(Atext,(160,480))
+    Atext=smallFont.render("ROBOT",True,(255,255,255))
+    screen.blit(Atext,(190,480))
+    boomtext=smallFont.render("BOOMBER",True,(255,255,255))
+    screen.blit(boomtext,(300,480))
+    mctext=smallFont.render("MCMAN",True,(255,255,255))
+    screen.blit(mctext,(430,480))
+    bintext=smallFont.render("RECYCLE BIN",True,(255,255,255))
+    screen.blit(bintext,(520,480))
+    slimetext=smallFont.render("SLIME",True,(255,255,255))
+    screen.blit(slimetext,(650,480))
+    Ftext=smallFont.render("F",True,(255,255,255))
+    screen.blit(Ftext,(760,480))
     draw.rect(screen,(0,0,0),(30,100,313,30))
     p1text=courierFont.render("Player 1: Robot",True,(255,255,255))
     screen.blit(p1text,(29,100))
@@ -155,7 +165,7 @@ def select():
                     chapos1=2
                 elif player1=="Recycle bin":
                     chapos1=3
-                elif player1=="E":
+                elif player1=="Slime":
                     chapos1=4
                 elif player1=="F":
                     chapos1=5
@@ -173,11 +183,10 @@ def select():
                     chapos2=2
                 elif player2=="Recycle bin":
                     chapos2=3
-                elif player2=="E":
+                elif player2=="Slime":
                     chapos2=4
                 elif player2=="F":
-                    chapos2=5
-        print(chapos1,chapos2)        
+                    chapos2=5      
         if mb[0]==1 and startRect.collidepoint(mx,my) and click:
             return "game"            
         display.flip()
@@ -220,10 +229,7 @@ def drawScene(screen,picList1,picList2):
     screen.blit(pic2,(p2[X],p2[Y]))
     myClock.tick(60)
     display.flip()
-'''
-We need to have moveGuy for player 1 and player 2
-move and frame also should have one for each player
-'''
+
 move1=0
 frame1=0
 def moveGuy1(pr):
@@ -267,8 +273,11 @@ def moveGuy1(pr):
         pr[VY]=-4
         if pr[Y]<700:
             pr[DOUBLE]=False
-      
-
+    if keys[K_RSHIFT]:
+        newMove=6
+    if keys[K_RCTRL]:
+        newMove=7
+    
         
     if pr[VY]<=0:#going up
         pr[GODOWN]=False
@@ -282,8 +291,7 @@ def moveGuy1(pr):
         pr[DOUBLE]=True
     pr[VY]+=0.2
     
-##    elif keys[K_SHIFT]
-##    elif keys[K_CTRL]
+
     
     if move1==newMove:
         frame1=frame1+0.4
@@ -338,7 +346,10 @@ def moveGuy2(pr):
             pr[DOUBLE]=False
     
         
-    
+    if keys[K_c]:
+        newMove=6
+    if keys[K_v]:
+        newMove=7
 
     if pr[VY]<=0:#going up
         pr[GODOWN]=False
@@ -352,8 +363,7 @@ def moveGuy2(pr):
         pr[DOUBLE]=True
     pr[VY]+=0.2
     
-##    elif keys[K_SHIFT]
-##    elif keys[K_CTRL]
+
     
 
     if move2==newMove:
@@ -363,7 +373,7 @@ def moveGuy2(pr):
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move2=newMove
         frame2=1
-        
+#def checkHit():  
    
 def addPics(name,start,end):
     mypic=[]
@@ -374,18 +384,20 @@ robotpics=[]
 robotpics.append(addPics("robotIdle",0,0))
 robotpics.append(addPics("robotWalkL",0,12))#left
 robotpics.append(addPics("robotWalkR",0,12))#right (needs fixing, how do i add numbers)
-robotpics.append(addPics("robotIdle",3,4))#right
+
 robotpics.append(addPics("robotIdle",5,6))#jump
 robotpics.append(addPics("robotIdle",7,8))#jump left
 robotpics.append(addPics("robotIdle",9,10))#jump right
 mcman=[]
 boomber=[]
 recyclebin=[]
-recyclebin.append(addPics("binWalk",0,12))
+recyclebin.append(addPics("binWalk",0,0))
 recyclebin.append(addPics("binWalk",0,12))
 recyclebin.append(addPics("binWalk",0,12))#right
-pics1=[robotpics,mcman,boomber,recyclebin]
-pics2=[robotpics,mcman,boomber,recyclebin]
+slime=[]
+pics1=[robotpics,mcman,boomber,recyclebin,slime]
+pics2=[robotpics,mcman,boomber,recyclebin,slime]
+
 def game():
     running = True
     while running:
