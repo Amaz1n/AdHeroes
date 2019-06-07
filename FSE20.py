@@ -16,7 +16,9 @@ DOUBLE=4
 p1=[500,700,0,True,True]
 p2=[300,700,0,True,True]
 myClock=time.Clock()
-
+rangeDmg=[5,7,7,10,12,20] #damage values for basic ranged ability, pistol,
+                          #space gun, throwing away gun, rifle, and sniper
+meleeDmg=[7,8,10,13] #damage values for basic melee, stick, french fry, mcsword
 
 realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
 
