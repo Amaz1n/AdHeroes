@@ -48,45 +48,45 @@ def menu():#main menu
         screen.blit(quittext,(500,568))#blit text
         
         for i in range(len(buttons)):#button interactions
-            draw.rect(screen,(0,255,0),buttons[i],2)
-            if buttons[i].collidepoint(mx,my):
-                draw.rect(screen,(0,0,255),buttons[i],2)
-                if mb[0]==1:
-                    return vals[i]
-            else:
-                draw.rect(screen,(255,255,0),buttons[i],2)
+            draw.rect(screen,(0,255,0),buttons[i],2)#draw buttons
+            if buttons[i].collidepoint(mx,my):#hovering over a button
+                draw.rect(screen,(0,0,255),buttons[i],2)#highlight button
+                if mb[0]==1:#click
+                    return vals[i]#return button value
+            else:#not hovering
+                draw.rect(screen,(255,255,0),buttons[i],2)#normal button
         display.flip()
-mapPos=0
-player1="robot"
+mapPos=0#map list position
+player1="robot"#default characters
 player2="robot"
-chapos1=0
-chapos2=0
+chapos1=0#player 1 character list position
+chapos2=0#player 2 character list position
 
-def select():
-    global player1,player2,chapos1,chapos2
-    right=image.load("rightarrow.png")
-    left=image.load("leftarrow.png")
-    right2=image.load("rightarrow2.png")
-    left2=image.load("leftarrow2.png")
-    running = True
+def select():#select screen
+    global player1,player2,chapos1,chapos2#global variables
+    right=image.load("rightarrow.png")#right arrow (default)
+    left=image.load("leftarrow.png")#left arrow (default)
+    right2=image.load("rightarrow2.png")#right arrow (hovered)
+    left2=image.load("leftarrow2.png")#left arrow (hovered)
+    running = True#running
     global mapPos
     #resize "back3 picture" as mapRect"
     back3=image.load("back3.png")                               #resize "back3 picture" as mapRect"
     mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#we need to add map
     #background image
-    screen.fill((30,30,24))
+    screen.fill((30,30,24))#background colour
     chaList=["Robot","Boomber","Mcman","Recycle bin","Slime","F"]#character name
-    selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]
-    for i in range(len(selectbox)):
+    selectbox=[Rect(x*120+170,510,100,100) for x in range(6)]#character selection boxes
+    for i in range(len(selectbox)):#draw boxes
         draw.rect(screen,(150,100,200),selectbox[i])
     startRect=Rect(350,620,350,150)#start game button
-    mapRect=Rect(270,210,500,200)
-    rightRect=Rect(870,260,63,81)
-    leftRect=Rect(124,260,63,81)
+    mapRect=Rect(270,210,500,200)#map icon rectangle
+    rightRect=Rect(870,260,63,81)#hitbox for right arrow
+    leftRect=Rect(124,260,63,81)#hitbox for left arrow
     draw.rect(screen,(200,200,120),mapRect)#showing map
     draw.rect(screen,(30,30,150),startRect)#start game button
     #####text
-    largeFont=font.SysFont("Courier New",100)
+    largeFont=font.SysFont("Courier New",100)#large font
     selecttext=largeFont.render("SELECT",True,(255,255,255))
     screen.blit(selecttext,(335,30))
     readytext=largeFont.render("READY",True,(255,255,255))
