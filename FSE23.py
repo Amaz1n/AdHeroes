@@ -113,7 +113,7 @@ def select():
     #####character images
     robotimage=image.load("robotIdle000.png")
     screen.blit(robotimage,(187,520))
-    recycleimage=image.load("binIdleF.png")
+    recycleimage=image.load("binIdleF000.png")
     screen.blit(recycleimage,(550,520))
     #####
     while running:
