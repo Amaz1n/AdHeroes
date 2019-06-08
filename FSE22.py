@@ -222,9 +222,39 @@ def credit():
         if key.get_pressed()[27]: running = False
         display.flip()
     return "menu"
+def end(winner):
+    running = True
+    while running:
+        for evnt in event.get():
+            if evnt.type == QUIT:
+                running = False
+        mb=mouse.get_pressed()
+        mx,my=mouse.get_pos()
+        if winner=="player1":
+            print("p1 win")
+        elif winner=="player2":
+            print("p2 win")
+        restartrect=Rect(400,500,250,100)
+        draw.rect(screen,(0,230,110),restartrect)
+        if restartrect.collidepoint(mx,my):
+            draw.rect(screen,(100,159,180),restartrect,3)
+        else:
+            draw.rect(screen,(0,0,0),restartrect,3)
+        if key.get_pressed()[27]: running = False
+        if mb[0]==1 and restartrect.collidepoint(mx,my):
+            return "select"
+        
+        display.flip()
+    return "menu"
+        
+    
 def drawScene(screen,picList1,picList2,health1,health2):
     global mapPos
     screen.blit(realmap[mapPos],(0,0))
+    p1text=courierFont.render("Player 1",True,(0,0,0))
+    screen.blit(p1text,(870,10))
+    p2text=courierFont.render("Player 2",True,(0,0,0))
+    screen.blit(p2text,(30,10))
     draw.rect(screen,(255,0,0),(30,50,400,30))#red
                         # left health  health1=50,health2=90    
     draw.rect(screen,(0,255,0),(30,50,health1/100*400,30))#green
@@ -246,13 +276,12 @@ def moveGuy1(pr):
     keys=key.get_pressed()
     
     if keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
-        print("jump")
         newMove=3
         pr[VY]=-8
         if pr[Y]<700:
             pr[DOUBLE]=False
     if keys[K_DOWN]:
-        newMove=1
+        newMove=0
         pr[Y]+=4
     if keys[K_LEFT] and pr[X]>=0:
         if pr[Y]<700:
@@ -298,7 +327,6 @@ def moveGuy1(pr):
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move1=newMove
         frame1=1
-        print("start")
 
 move2=0   #move for player2        
 frame2=0  #frame for player2
@@ -308,7 +336,6 @@ def moveGuy2(pr):
     newMove=-1
     keys=key.get_pressed()
     if keys[K_w] and pr[GODOWN] and pr[DOUBLE]:#just jump
-        print("jump")
         newMove=3
         pr[VY]=-8
         if pr[Y]<700:
@@ -351,7 +378,6 @@ def moveGuy2(pr):
         pr[GODOWN]=True
         pr[DOUBLE]=True
     pr[VY]+=0.2
-
     if move2==newMove:
         frame2=frame2+0.7
         if frame2>=len(pics2[chapos2][move2]):
@@ -359,6 +385,7 @@ def moveGuy2(pr):
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move2=newMove
         frame2=1
+        
 #def checkHit():  
    
 def addPics(name,start,end):
@@ -366,6 +393,7 @@ def addPics(name,start,end):
     for i in range(start,end+1):
         mypic.append(image.load("%s%03d.png"%(name,i)))
     return mypic
+
 #making picture list for each character movement
 robotpics=[]
 robotpics.append(addPics("robotIdle",0,1))
@@ -385,24 +413,29 @@ pics1=[robotpics,mcman,boomber,recyclebin,slime]#pics list for player1
 pics2=[robotpics,mcman,boomber,recyclebin,slime]#pics list for player2
 
 def game():
+    health1=100
+    health2=100
+    global chapos1,chapos2
     running = True
-    
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
         if key.get_pressed()[27]: running = False
-        global chapos1,chapos2
+        
         moveGuy1(p1)########
         moveGuy2(p2)########
         #               player1 piclist  player2 piclist health1, health2
-        drawScene(screen,pics1[chapos1],pics2[chapos2],50,90)
+        drawScene(screen,pics1[chapos1],pics2[chapos2],health1,health2)
+        if health1<=0:
+            return end(health2)
+        if health2<=0:
+            return end(health1)
         myClock.tick(60)
     return "select"
 
 
-running=True                          
-x,y=0,0        
+running=True      
 page = "menu"
 while page != "exit":
     if page == "menu":
@@ -415,5 +448,6 @@ while page != "exit":
         page = credit()
     if page == "select":
         page = select()
+
 
 quit()
