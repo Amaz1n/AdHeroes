@@ -113,7 +113,7 @@ def select():
     robotimage=image.load("robotIdle000.png")
     screen.blit(robotimage,(307,520))
     mcdsimage=image.load("mcdsIdle000.png")
-    screen.blit(mcdsimage,(450,520))
+    screen.blit(mcdsimage,(428,520))
     recycleimage=image.load("binIdleF000.png")
     screen.blit(recycleimage,(550,520))
     #####
@@ -242,7 +242,7 @@ def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):
     draw.rect(screen,(255,0,0),(590,50,400,30))#red
     draw.rect(screen,(0,255,0),(590,50,health2/100*400,30))#green
     for b in bull1:
-        draw.circle(screen,(255,0,0),(b[0],b[1]),4)
+        draw.circle(screen,(255,0,0),(int(b[0]),int(b[1])),4)
     for b in bull2:
         draw.circle(screen,(255,0,0),(int(b[0]),int(b[1])),4)
     pic1=picList1[move1][int(frame1)]
@@ -260,7 +260,7 @@ MAXRAPID1=13
 rapid1=MAXRAPID1
 keyboard1=[]
 def moveGuy1(pr,cha):
-    global move1,frame1
+    global move1,frame1,rapid1,MAXRAPID1,keyboard1
     newMove=-1
     keys=key.get_pressed()
     
@@ -277,6 +277,7 @@ def moveGuy1(pr,cha):
             newMove=4
         else:
             newMove=1
+        keyboard1.append("left")
         pr[X]-=6
         if keys[K_DOWN]:
             pr[Y]+=4
@@ -285,6 +286,7 @@ def moveGuy1(pr,cha):
             newMove=5
         else:
             newMove=2
+        keyboard1.append("right")
         pr[X]+=6
         if keys[K_DOWN]:
             pr[Y]+=4
@@ -299,9 +301,14 @@ def moveGuy1(pr,cha):
 
         
     if keys[K_RSHIFT]:#ranged
-        if cha=="robot" and rapid1==MAXRAPID1:
-            rapid1=0
-            bullets1.append([pr[X]+50,pr[Y]+32,v[0],v[1],keyboard[-1]])
+        if cha=="robot":
+            MAXRAPID1=16
+            if rapid1==MAXRAPID1:
+                rapid1=0
+                if keyboard1[-1]=="left":
+                    bullets1.append([pr[X]+10,pr[Y]+32,v[0],v[1],keyboard1[-1]])
+                if keyboard1[-1]=="right":
+                    bullets1.append([pr[X]+50,pr[Y]+32,v[0],v[1],keyboard1[-1]])
         if cha=="mcman" and rapid1==MAXRAPID1:
             rapid1=0
             bullets1.append([pr[0]+50,pr[1]+32,v[0],v[1],keyboard1[-1]])
@@ -390,16 +397,24 @@ def moveGuy2(pr,cha):
             MAXRAPID2=16
             if rapid2==MAXRAPID2:
                 rapid2=0
-                bullets2.append([pr[X]+50,pr[Y]+32,v[0],v[1],keyboard2[-1]])
-        if cha=="mcman" and rapid2==MAXRAPID2:
-            rapid2=0
-            bullets2.append([pr[0]+50,pr[1]+32,v[0],v[1],keyboard2[-1]])
+                if keyboard2[-1]=="left":
+                    bullets2.append([pr[X]+10,pr[Y]+32,v[0],v[1],keyboard2[-1]])
+                if keyboard2[-1]=="right":
+                    bullets2.append([pr[X]+50,pr[Y]+32,v[0],v[1],keyboard2[-1]])
+        if cha=="mcman":
+            MAXRAPID2=8
+            if rapid2==MAXRAPID2:
+                rapid2=0
+                if keyboard2[-1]=="left":
+                    bullets2.append([pr[X],pr[Y]+38,v[0],v[1],keyboard2[-1]])
+                if keyboard2[-1]=="right":
+                    bullets2.append([pr[X]+70,pr[Y]+38,v[0],v[1],keyboard2[-1]])
         if cha=="recyclebin" and rapid2==MAXRAPID2:
             rapid2=0
-            bullets2.append([pr[0]+50,pr[1]+10,v[0],v[1],keyboard2[-1]])
+            bullets2.append([pr[X]+50,pr[Y]+10,v[0],v[1],keyboard2[-1]])
         if cha=="slime" and rapid2==MAXRAPID2:
             rapid2=0
-            bullets2.append([pr[0]+50,pr[1]+48,v[0],v[1],keyboard2[-1]])
+            bullets2.append([pr[X]+50,pr[Y]+48,v[0],v[1],keyboard2[-1]])
         if keyboard2[-1]=="left":
             newMove=8
         if keyboard2[-1]=="right":
@@ -427,20 +442,33 @@ def moveGuy2(pr,cha):
     elif newMove!=-1:#this is the MOMENT we START WALKING
         move2=newMove
         frame2=1
+        
 def distance(x1,y1,x2,y2):
     return sqrt((x1-x2)**2+(y1-y2)**2)
-def checkHit(bull1,bull2,pr1,pr2):
+
+def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
     global health1,health2
     for b in bull1:
-        if distance(b[0],b[1],pr2[0],pr2[1])<10:
-            print("J")
+        if distance(b[0],b[1],pr2[0],pr2[1])<33:
             bull1.remove(b)
             health2-=6
     for b in bull2:
-        if distance(b[0],b[1],pr1[0],pr1[1])<33:
-           
-            bull2.remove(b)
-            health1-=6
+        if cha1=="robot":
+            if distance(b[0],b[1],pr1[0],pr1[1])<33:
+                bull2.remove(b)
+                health1-=6
+        if cha1=="mcman":
+            if distance(b[0],b[1],pr1[0],pr1[1])<43:
+                bull2.remove(b)
+                health1-=6
+        if cha1=="recyclebin":
+            if distance(b[0],b[1],pr1[0],pr1[1])<43:
+                bull2.remove(b)
+                health1-=6
+        if cha1=="slime":
+            if distance(b[0],b[1],pr1[0],pr1[1])<33:
+                bull2.remove(b)
+                health1-=6
     return health1,health2         
 def moveBullets(p1,p2,bull1,bull2,keyboard2):
     for b in bull1:
@@ -477,10 +505,10 @@ robotpics.append(addPics("robotWalkR",0,12))#right (needs fixing, how do i add n
 robotpics.append(addPics("robotIdle",5,6))#jump
 robotpics.append(addPics("robotIdle",7,8))#jump left
 robotpics.append(addPics("robotIdle",9,10))#jump right
-robotpics.append(addPics("robotIdle",9,10))
-robotpics.append(addPics("robotIdle",9,10))
-robotpics.append(addPics("robotIdle",9,10))
-robotpics.append(addPics("robotIdle",9,10))
+robotpics.append(addPics("robotMeleeL",0,1))
+robotpics.append(addPics("robotMeleeR",0,1))
+robotpics.append(addPics("robotShootL",0,1))
+robotpics.append(addPics("robotShootR",0,1))
 
 mcman=[]
 mcman.append(addPics("mcdsIdle",0,1))
@@ -538,7 +566,7 @@ def game():
         #               player1 piclist  player2 piclist health1, health2
         drawScene(screen,pics1[chapos1],pics2[chapos2],health1,health2,bullets1,bullets2)
         moveBullets(p1,p2,bullets1,bullets2,keyboard2)
-        checkHit(bullets1,bullets2,p1,p2,health1,health2)
+        checkHit(bullets1,bullets2,p1,p2,charlist[chapos1],charlist[chapos2])
         if health1<=0:
             return end(health2)
         if health2<=0:
