@@ -235,12 +235,14 @@ def end(winner):
     return "menu"
 #bulletimage=[image.load("  ## each character will have different bullet image
 def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):
-    global mapPos,chapos1,chapos2
+    global mapPos,chapos1,chapos2,p1
     screen.blit(realmap[mapPos],(0,0))
     draw.rect(screen,(255,0,0),(30,50,400,30))#red  
-    draw.rect(screen,(0,255,0),(30,50,health1/100*400,30))#green
+    draw.rect(screen,(0,255,0),(30,50,health2/100*400,30))#green
     draw.rect(screen,(255,0,0),(590,50,400,30))#red
-    draw.rect(screen,(0,255,0),(590,50,health2/100*400,30))#green
+    draw.rect(screen,(0,255,0),(590,50,health1/100*400,30))#green
+    meleerect=Rect(p2[X],p2[Y]+27,20,10)
+    draw.rect(screen,(0,0,0),meleerect)
     for b in bull1:
         draw.circle(screen,(255,0,0),(int(b[0]),int(b[1])),4)
     for b in bull2:
@@ -256,9 +258,9 @@ def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):
 move1=0 #move for player1
 frame1=0 #frame for player1
 bullets1=[]
-MAXRAPID1=13
+MAXRAPID1=0
 rapid1=MAXRAPID1
-keyboard1=[]
+keyboard1=["right"]
 def moveGuy1(pr,cha):
     global move1,frame1,rapid1,MAXRAPID1,keyboard1
     newMove=-1
@@ -309,13 +311,23 @@ def moveGuy1(pr,cha):
                     bullets1.append([pr[X]+10,pr[Y]+32,v[0],v[1],keyboard1[-1]])
                 if keyboard1[-1]=="right":
                     bullets1.append([pr[X]+50,pr[Y]+32,v[0],v[1],keyboard1[-1]])
-        if cha=="mcman" and rapid1==MAXRAPID1:
-            rapid1=0
-            bullets1.append([pr[0]+50,pr[1]+32,v[0],v[1],keyboard1[-1]])
-        if cha=="recyclebin" and rapid1==MAXRAPID1:
-            rapid1=0
-            bullets1.append([pr[0]+50,pr[1]+10,v[0],v[1],keyboard1[-1]])
-        if cha=="slime" and rapid1==MAXRAPID1:
+        if cha=="mcman":
+            MAXRAPID1=8
+            if rapid1==MAXRAPID1:
+                rapid1=0
+                if keyboard1[-1]=="left":
+                    bullets1.append([pr[X],pr[Y]+38,v[0],v[1],keyboard1[-1]])
+                if keyboard1[-1]=="right":
+                    bullets1.append([pr[X]+70,pr[Y]+38,v[0],v[1],keyboard1[-1]])
+        if cha=="recyclebin":
+            MAXRAPID1=8
+            if rapid1==MAXRAPID1:
+                rapid1=0
+                if keyboard1[-1]=="left":
+                    bullets1.append([pr[X]+20,pr[Y]+10,v[0],v[1],keyboard1[-1]])
+                if keyboard1[-1]=="right":
+                    bullets1.append([pr[X]+50,pr[Y]+10,v[0],v[1],keyboard1[-1]])       
+        if cha=="slime":
             rapid1=0
             bullets1.append([pr[0]+50,pr[1]+48,v[0],v[1],keyboard1[-1]])
         if keyboard1[-1]=="left":
@@ -324,6 +336,8 @@ def moveGuy1(pr,cha):
             newMove=9
     if rapid1<MAXRAPID1:
         rapid1+=1
+    else:
+        rapid1-=1
         
     
            
@@ -350,9 +364,9 @@ def moveGuy1(pr,cha):
 move2=0   #move for player2        
 frame2=0  #frame for player2
 bullets2=[]
-MAXRAPID2=8
+MAXRAPID2=0
 rapid2=MAXRAPID2
-keyboard2=[]
+keyboard2=["left"]
 def moveGuy2(pr,cha):
     global move2,frame2,rapid2,MAXRAPID2,keyboard2
     newMove=-1
@@ -409,12 +423,21 @@ def moveGuy2(pr,cha):
                     bullets2.append([pr[X],pr[Y]+38,v[0],v[1],keyboard2[-1]])
                 if keyboard2[-1]=="right":
                     bullets2.append([pr[X]+70,pr[Y]+38,v[0],v[1],keyboard2[-1]])
-        if cha=="recyclebin" and rapid2==MAXRAPID2:
-            rapid2=0
-            bullets2.append([pr[X]+50,pr[Y]+10,v[0],v[1],keyboard2[-1]])
-        if cha=="slime" and rapid2==MAXRAPID2:
-            rapid2=0
-            bullets2.append([pr[X]+50,pr[Y]+48,v[0],v[1],keyboard2[-1]])
+        if cha=="recyclebin":
+            if rapid2==MAXRAPID2:
+                rapid2=0
+                if keyboard2[-1]=="left":
+                    bullets2.append([pr[X]+20,pr[Y]+10,v[0],v[1],keyboard2[-1]])
+                if keyboard2[-1]=="right":
+                    bullets2.append([pr[X]+50,pr[Y]+10,v[0],v[1],keyboard2[-1]])
+        if cha=="slime":
+            if rapid2==MAXRAPID2:
+                rapid2=0
+                if keyboard2[-1]=="left":
+                    bullets2.append([pr[X]+20,pr[Y]+10,v[0],v[1],keyboard2[-1]])
+                if keyboard2[-1]=="right":
+                    bullets2.append([pr[X]+50,pr[Y]+10,v[0],v[1],keyboard2[-1]])
+        
         if keyboard2[-1]=="left":
             newMove=8
         if keyboard2[-1]=="right":
@@ -443,33 +466,57 @@ def moveGuy2(pr,cha):
         move2=newMove
         frame2=1
         
-def distance(x1,y1,x2,y2):
-    return sqrt((x1-x2)**2+(y1-y2)**2)
 
 def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
     global health1,health2
     for b in bull1:
-        if distance(b[0],b[1],pr2[0],pr2[1])<33:
-            bull1.remove(b)
-            health2-=6
-    for b in bull2:
+        bulletrect=Rect(b[X],b[Y],8,8)
         if cha1=="robot":
-            if distance(b[0],b[1],pr1[0],pr1[1])<33:
+            inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)
+            if bulletrect.colliderect(inplayer2):
+                bull1.remove(b)
+                health2-=6
+        if cha1=="mcman":
+            inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)
+            if bulletrect.colliderect(inplayer2):
+                bull1.remove(b)
+                health2-=6
+        if cha1=="recyclebin":
+            inplayer2=Rect(p1[X]+5,p1[Y]+10,60,55)
+            if bulletrect.colliderect(inplayer2):
+                bull1.remove(b)
+                health2-=6
+    for b in bull2:
+        bulletrect=Rect(b[X],b[Y],4,4)
+        if cha1=="robot":
+            inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)
+            if bulletrect.colliderect(inplayer1):
                 bull2.remove(b)
                 health1-=6
         if cha1=="mcman":
-            if distance(b[0],b[1],pr1[0],pr1[1])<43:
+            inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)
+            if bulletrect.colliderect(inplayer1):
                 bull2.remove(b)
                 health1-=6
         if cha1=="recyclebin":
-            if distance(b[0],b[1],pr1[0],pr1[1])<43:
+            inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)
+            if bulletrect.colliderect(inplayer1):
                 bull2.remove(b)
                 health1-=6
         if cha1=="slime":
-            if distance(b[0],b[1],pr1[0],pr1[1])<33:
                 bull2.remove(b)
                 health1-=6
-    return health1,health2         
+    return health1,health2
+def checkHitmelee(pr1,pr2,cha1,cha2):
+    global move1,move2,health1,health2
+    if cha1=="robot":
+        if move1=="6":
+            inplayer2=Rect(p1[X]+18,p1[Y]+12,27,54)
+            meleerect=Rect(pr1[X],pr1[Y]+27,20,10)
+            if meleerect.colliderect(inplayer2):
+                health-=6
+        #if move1=="7":
+            
 def moveBullets(p1,p2,bull1,bull2,keyboard2):
     for b in bull1:
         if b[4]=="right":
@@ -552,6 +599,7 @@ charlist=["robot","mcman","recyclebin","slime"]
 
 def game():
     running = True
+    global chapos1,chapos2,health1,health2
     health1=100
     health2=100
     while running:
@@ -559,7 +607,7 @@ def game():
             if evnt.type == QUIT:
                 running = False
         if key.get_pressed()[27]: running = False
-        global chapos1,chapos2,health1,health2
+        
         moveGuy1(p1,charlist[chapos1])########
         moveGuy2(p2,charlist[chapos2])########
         
