@@ -14,16 +14,19 @@ GODOWN=3#boolean if going down
 DOUBLE=4#boolean if double jump available
 p1=[600,520,0,True,True,True]#player 1
 p2=[300,520,0,True,True,True]#player 2
-
+musiclist=["firstmap.mp3","secondmap.mp3"]
+mapmusic=["firstmap.mp3","secondmap.mp3"]
+volume=0.3
 v=[10,0]#the horiz and vert speed of the bullet
 myClock=time.Clock()
 rangeDmg=[5,7,7,10,12,20] #damage values for basic ranged ability, pistol,
                           #space gun, throwing away gun, rifle, and sniper
 meleeDmg=[7,8,10,13] #damage values for basic melee, stick, french fry, mcsword
-
 realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
 
 def menu():#main menu
+    mixer.music.load(musiclist[mapPos])
+    mixer.music.play(-1)
     running = True#game running
     myClock = time.Clock()#clock
     buttons=[Rect(430,250,200,60),Rect(430,350,200,60),
@@ -65,13 +68,15 @@ chapos1=0
 chapos2=0
 
 def select():
-    global player1,player2,chapos1,chapos2
+    mixer.music.load(musiclist[1])
+    mixer.music.play(-1)
+    global player1,player2,chapos1,chapos2,mapPos
     right=image.load("rightarrow.png")
     left=image.load("leftarrow.png")
     right2=image.load("rightarrow2.png")
     left2=image.load("leftarrow2.png")
     running = True
-    global mapPos
+    
     #resize "back3 picture" as mapRect"
     back3=image.load("back3.png")                               #resize "back3 picture" as mapRect"
     mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#we need to add map
@@ -189,6 +194,8 @@ def select():
     return "menu"
 
 def instructions():
+    mixer.music.load(musiclist[2])
+    mixer.music.play(-1)
     running = True
     instruction=image.load("instructions.png") #load picture
     while running:
@@ -201,6 +208,8 @@ def instructions():
     return "menu"
 
 def credit():
+    mixer.music.load(musiclist[3])
+    mixer.music.play(-1)
     creditPic=image.load("credits.png")
     running = True
     while running:
@@ -259,6 +268,7 @@ def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):
         screen.blit(bulletimage[chapos1],(int(b[0]),int(b[1])))
     for b in bull2:
         screen.blit(bulletimage[chapos2],(int(b[0]),int(b[1])))
+    print(frame1)
     pic1=picList1[move1][int(frame1)]
     pic2=picList2[move2][int(frame2)]
     
@@ -329,9 +339,9 @@ def moveGuy1(pr,cha):
             if rapid1==MAXRAPID1:
                 rapid1=0
                 if keyboard1[-1]=="left":
-                    bullets1.append([pr[X]-57,pr[Y]+10,v[0],v[1],keyboard1[-1]])
+                    bullets1.append([pr[X]-15,pr[Y]+32,v[0],v[1],keyboard1[-1]])
                 if keyboard1[-1]=="right":
-                    bullets1.append([pr[X]+60,pr[Y]+10,v[0],v[1],keyboard1[-1]])
+                    bullets1.append([pr[X]+60,pr[Y]+32,v[0],v[1],keyboard1[-1]])
         if cha=="recyclebin":
             MAXRAPID1=8
             if rapid1==MAXRAPID1:
@@ -442,7 +452,7 @@ def moveGuy2(pr,cha):
             if rapid2==MAXRAPID2:
                 rapid2=0
                 if keyboard2[-1]=="left":
-                    bullets2.append([pr[X]-57,pr[Y]+32,v[0],v[1],keyboard2[-1]])
+                    bullets2.append([pr[X]-15,pr[Y]+32,v[0],v[1],keyboard2[-1]])
                 if keyboard2[-1]=="right":
                     bullets2.append([pr[X]+60,pr[Y]+32,v[0],v[1],keyboard2[-1]])
         if cha=="recyclebin":
@@ -485,6 +495,8 @@ def moveGuy2(pr,cha):
     pr[VY]+=0.2
     if move2==newMove:
         frame2=frame2+0.4
+        if move2==3:
+            frame2+=1
         if frame2>=len(pics2[chapos2][move2]):
             frame2=1#restarting at frame 1 (0 - standing 1-5 is walking)
     elif newMove!=-1:#this is the MOMENT we START WALKING
@@ -568,22 +580,22 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)
                 if bulletrect.colliderect(inplayer2):
                     bull1.remove(b)
-                    health2-=1.5
+                    health2-=2
             if cha2=="mcman":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)
                 if bulletrect.colliderect(inplayer2):
                     bull1.remove(b)
-                    health2-=1.5
+                    health2-=2
             if cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)
                 if bulletrect.colliderect(inplayer2):
                     bull1.remove(b)
-                    health2-=1.5
+                    health2-=2
             if cha2=="slime":
                 inplayer2=Rect(p2[X],p2[Y]+14,60,53)
                 if bulletrect.colliderect(inplayer2):
                     bull1.remove(b)
-                    health2-=1.5
+                    health2-=2
     for b in bull2:
         if cha2=="robot":#robot
             bulletrect=Rect(b[X],b[Y],16,16)
@@ -657,22 +669,22 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)
                 if bulletrect.colliderect(inplayer1):
                     bull2.remove(b)
-                    health1-=1.5
+                    health1-=2
             if cha1=="mcman":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)
                 if bulletrect.colliderect(inplayer1):
                     bull2.remove(b)
-                    health1-=1.5
+                    health1-=2
             if cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)
                 if bulletrect.colliderect(inplayer1):
                     bull2.remove(b)
-                    health1-=1.5
+                    health1-=2
             if cha1=="slime":
                 inplayer1=Rect(p1[X],p1[Y]+14,60,53)
                 if bulletrect.colliderect(inplayer1):
                     bull2.remove(b)
-                    health1-=1.5
+                    health1-=2
     return health1,health2
 
 maxrapid1=20
@@ -958,7 +970,7 @@ slime=[]
 slime.append(addPics("slimeIdleF",0,1))
 slime.append(addPics("slimeWalkL",0,5))#left
 slime.append(addPics("slimeWalkR",0,5))#right
-slime.append(addPics("slimeJumpR",0,2))#jump
+slime.append(addPics("slimeJumpF",2,3))#jump
 slime.append(addPics("slimeJumpL",0,5))#jump left
 slime.append(addPics("slimeJumpR",0,5))#jump left
 slime.append(addPics("slimeMeleeL",0,1))#hit left
@@ -970,9 +982,10 @@ pics2=[robotpics,mcman,recyclebin,slime]#pics list for player2
 
 charlist=["robot","mcman","recyclebin","slime"]
 
+
 def game():
     running = True
-    global chapos1,chapos2,health1,health2,frame1,move1,frame2,move2,bullets1,bullets2,keyboard1,keyboard2,p1,p2
+    global chapos1,chapos2,health1,health2,frame1,move1,frame2,move2,bullets1,bullets2,keyboard1,keyboard2,p1,p2,pos
     frame1=0
     move1=0
     frame2=0
@@ -985,6 +998,8 @@ def game():
     keyboard2=["right"]
     p1=[600,520,0,True,True,True]
     p2=[300,520,0,True,True,True]
+    mixer.music.load(musiclist[mapPos])
+    mixer.music.play(-1)
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
