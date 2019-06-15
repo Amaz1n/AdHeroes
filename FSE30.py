@@ -495,8 +495,6 @@ def moveGuy2(pr,cha):
     pr[VY]+=0.2
     if move2==newMove:
         frame2=frame2+0.4
-        if move2==3:
-            frame2+=1
         if frame2>=len(pics2[chapos2][move2]):
             frame2=1#restarting at frame 1 (0 - standing 1-5 is walking)
     elif newMove!=-1:#this is the MOMENT we START WALKING
