@@ -14,7 +14,7 @@ GODOWN=3#boolean if going down
 DOUBLE=4#boolean if double jump available
 p1=[600,520,0,True,True,True]#player 1
 p2=[300,520,0,True,True,True]#player 2
-musiclist=["menusong.mp3","select.mp3","secondmap.mp3","winnersong.mp3"]
+musiclist=["menusong.mp3","select.mp3","creditsong.mp3","winnersong.mp3"]
 mapmusic=["firstmap.mp3","secondmap.mp3","thirdmap.mp3"]
 volume=0.3
 v=[10,0]#the horiz and vert speed of the bullet
@@ -320,12 +320,12 @@ def moveGuy1(pr,cha):
     
     if keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:
         newMove=3
-        pr[VY]=-8
+        pr[VY]=-12
         if pr[Y]<520:
             pr[DOUBLE]=False
     if keys[K_DOWN]:
         newMove=0
-        pr[Y]+=4
+        pr[Y]+=10
     if keys[K_LEFT] and pr[X]>=0:
         if pr[Y]<520:
             newMove=4
@@ -334,7 +334,7 @@ def moveGuy1(pr,cha):
         keyboard1.append("left")
         pr[X]-=6
         if keys[K_DOWN]:
-            pr[Y]+=4
+            pr[Y]+=6
     elif keys[K_RIGHT] and pr[X]<=986:
         if pr[Y]<520:
             newMove=5
@@ -343,7 +343,7 @@ def moveGuy1(pr,cha):
         keyboard1.append("right")
         pr[X]+=6
         if keys[K_DOWN]:
-            pr[Y]+=4
+            pr[Y]+=6
     else:
         frame1=0 #0 is the "idle" frame (standing pose)
 
@@ -410,7 +410,7 @@ def moveGuy1(pr,cha):
         pr[VY]=0
         pr[GODOWN]=True
         pr[DOUBLE]=True
-    pr[VY]+=0.2    
+    pr[VY]+=0.35    
     
     if move1==newMove:
         frame1=frame1+0.4
@@ -433,12 +433,12 @@ def moveGuy2(pr,cha):
     keys=key.get_pressed()
     if keys[K_w] and pr[GODOWN] and pr[DOUBLE]:#just jump
         newMove=3
-        pr[VY]=-8
+        pr[VY]=-12
         if pr[Y]<520:
             pr[DOUBLE]=False
     if keys[K_s]:
         newMove=0
-        pr[Y]+=4
+        pr[Y]+=10
     if keys[K_a] and pr[X]>=0:#go left
         if pr[Y]<520:
             newMove=4
@@ -447,7 +447,7 @@ def moveGuy2(pr,cha):
         pr[X]-=6
         keyboard2.append("left")
         if keys[K_s]:
-            pr[Y]+=4
+            pr[Y]+=6
     elif keys[K_d] and pr[X]<=986:#go right
         if pr[Y]<520:
             newMove=5
@@ -456,7 +456,7 @@ def moveGuy2(pr,cha):
         pr[X]+=6
         keyboard2.append("right")
         if keys[K_s]:
-            pr[Y]+=4
+            pr[Y]+=6
     else:
         frame2=0 #0 is the "idle" frame (standing pose)
     maxrapid=20
@@ -523,7 +523,7 @@ def moveGuy2(pr,cha):
         pr[VY]=0
         pr[GODOWN]=True
         pr[DOUBLE]=True
-    pr[VY]+=0.2
+    pr[VY]+=0.35
     if move2==newMove:
         frame2=frame2+0.4
         if frame2>=len(pics2[chapos2][move2]):
