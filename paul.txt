@@ -1,1 +1,0 @@
-Ayo paul I need you to download the entire thing as a zip folder then extract it into a separate folder and copy the sprites, screens, etc. into one file (because I didn’t change the image paths in any of the files). I’ll need you to add the sideways jump frames and actually add frames cause it no longer displays them after I commented out the newMoves
