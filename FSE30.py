@@ -975,7 +975,7 @@ mcman=[]
 mcman.append(addPics("mcdsIdle",0,1))
 mcman.append(addPics("mcdsWalkL",0,11))#left
 mcman.append(addPics("mcdsWalkR",0,11))#right
-mcman.append(addPics("mcdsJumpL",0,5))#jump (needs fixing proper jump)
+mcman.append(addPics("mcdsJumpF",3,4))#jump 
 mcman.append(addPics("mcdsJumpL",0,5))#jump left
 mcman.append(addPics("mcdsJumpR",0,5))#jump right
 mcman.append(addPics("mcdsMeleeL",0,1))#hit left
