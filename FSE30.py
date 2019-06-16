@@ -14,8 +14,9 @@ GODOWN=3#boolean if going down
 DOUBLE=4#boolean if double jump available
 p1=[600,520,0,True,True,True]#player 1
 p2=[300,520,0,True,True,True]#player 2
-musiclist=["firstmap.mp3","secondmap.mp3"]
+musiclist=["firstmap.mp3","select.mp3","secondmap.mp3"]
 mapmusic=["firstmap.mp3","secondmap.mp3"]
+shootsound=["slimeshoot.mp3"]
 volume=0.3
 v=[10,0]#the horiz and vert speed of the bullet
 myClock=time.Clock()
@@ -25,7 +26,7 @@ meleeDmg=[7,8,10,13] #damage values for basic melee, stick, french fry, mcsword
 realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
 
 def menu():#main menu
-    mixer.music.load(musiclist[mapPos])
+    mixer.music.load(musiclist[1])
     mixer.music.play(-1)
     running = True#game running
     myClock = time.Clock()#clock
@@ -38,6 +39,7 @@ def menu():#main menu
         for evnt in event.get():
             if evnt.type==QUIT:#window exit button
                 return "exit"
+        keys=key.get_pressed()
         mx,my=mouse.get_pos()#mouse position
         mb=mouse.get_pressed()#mouse pressed
         screen.blit(mainBack,(0,0))#blit main menu background
@@ -61,6 +63,10 @@ def menu():#main menu
             else:
                 draw.rect(screen,(255,255,0),buttons[i],2)
         display.flip()
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
 mapPos=0
 player1="Robot"
 player2="Robot"
@@ -134,6 +140,7 @@ def select():
                 click = True
             if evnt.type == MOUSEBUTTONUP:
                 click = False
+        keys=key.get_pressed()
         mb=mouse.get_pressed()
         mx,my=mouse.get_pos() 
         if key.get_pressed()[27]: running = False
@@ -189,59 +196,78 @@ def select():
                 elif player2=="Slime":
                     chapos2=3   
         if mb[0]==1 and startRect.collidepoint(mx,my) and click:
-            return "game"            
+            return "game"
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
         display.flip()
     return "menu"
 
 def instructions():
-    mixer.music.load(musiclist[2])
-    mixer.music.play(-1)
+##    mixer.music.load(musiclist[2])
+##    mixer.music.play(-1)
     running = True
     instruction=image.load("instructions.png") #load picture
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
+        keys=key.get_pressed()
         screen.blit(instruction,(0,0))#blit the instruction picture
         if key.get_pressed()[27]: running = False
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
         display.flip()
+        
     return "menu"
 
 def credit():
-    mixer.music.load(musiclist[3])
-    mixer.music.play(-1)
+##    mixer.music.load(musiclist[2])
+##    mixer.music.play(-1)
     creditPic=image.load("credits.png")
     running = True
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
+        keys=key.get_pressed()
         screen.blit(creditPic,(0,0))#blit the credit picture
         if key.get_pressed()[27]: running = False
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
         display.flip()
     return "menu"
 
 def end(winner):
     courierFont=font.SysFont("Courier New",100)
     courierFont1=font.SysFont("Courier New",30)
+    winnerimage=image.load("champion.png")
+    backimage=image.load("cool screen.png")
     running = True
     while running:
         for evnt in event.get():
             if evnt.type == QUIT:
                 running = False
+        keys=key.get_pressed()
         mb=mouse.get_pressed()
         mx,my=mouse.get_pos()
-        
-        draw.rect(screen,(0,0,0),(0,0,1024,800))
+        screen.blit(backimage,(0,0))
+        winnerimage=image.load("champion.png")
+        screen.blit(winnerimage,(300,150))
         restartrect=Rect(400,500,250,100)
         draw.rect(screen,(0,230,110),restartrect)
         if winner=="player1":
-            winnertext=courierFont.render("PLAYER 1 WIN",True,(255,255,255))
+            winnertext=courierFont.render("PLAYER 1",True,(0,0,0))
         elif winner=="player2":
-            winnertext=courierFont.render("PLAYER 2 WIN",True,(255,255,255))
-        screen.blit(winnertext,(200,300))
-        returntext=courierFont1.render("Press to select",True,(255,255,255))
-        screen.blit(returntext,(400,500))
+            winnertext=courierFont.render("PLAYER 2",True,(0,0,0))
+        screen.blit(winnertext,(300,180))
+        returntext=courierFont1.render("Play Again",True,(255,255,255))
+        screen.blit(returntext,(440,532))
         if restartrect.collidepoint(mx,my):
             draw.rect(screen,(100,159,180),restartrect,3)
         else:
@@ -249,7 +275,10 @@ def end(winner):
         if key.get_pressed()[27]: running = False
         if mb[0]==1 and restartrect.collidepoint(mx,my):
             return "select"
-        
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
         display.flip()
     return "menu"
 bulletimage=[image.load("robotBullet.png"),image.load("mcBullet.png"),image.load("recycleBullet.png"),image.load("slimeBullet.png")]  ## each character will have different bullet image
@@ -268,7 +297,6 @@ def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):
         screen.blit(bulletimage[chapos1],(int(b[0]),int(b[1])))
     for b in bull2:
         screen.blit(bulletimage[chapos2],(int(b[0]),int(b[1])))
-    print(frame1)
     pic1=picList1[move1][int(frame1)]
     pic2=picList2[move2][int(frame2)]
     
@@ -354,6 +382,8 @@ def moveGuy1(pr,cha):
             MAXRAPID1=3
             if rapid1==MAXRAPID1:
                 rapid1=0
+                mixer.music.load(shootsound[0])
+                mixer.music.play(1)
                 if keyboard1[-1]=="left":
                     bullets1.append([pr[0]+10,pr[1]+35,v[0],v[1],keyboard1[-1]])
                 if keyboard1[-1]=="right":
@@ -956,7 +986,7 @@ recyclebin=[]
 recyclebin.append(addPics("binIdleF",0,1))
 recyclebin.append(addPics("binWalkL",0,11))#left
 recyclebin.append(addPics("binWalkR",0,11))#right
-recyclebin.append(addPics("binJumpR",0,5))#jump
+recyclebin.append(addPics("binJumpF",2,3))#jump
 recyclebin.append(addPics("binJumpL",2,3))#jump left
 recyclebin.append(addPics("binJumpR",2,3))#jump right
 recyclebin.append(addPics("binMeleeL",0,1))#hit left
@@ -1003,7 +1033,7 @@ def game():
             if evnt.type == QUIT:
                 running = False
         if key.get_pressed()[27]: running = False
-        
+        keys=key.get_pressed()
         moveGuy1(p1,charlist[chapos1])########
         moveGuy2(p2,charlist[chapos2])########
         
@@ -1017,7 +1047,10 @@ def game():
         if health2<=0:
             return end("player1")
         myClock.tick(60)
-    
+        if keys[K_m]:
+            mixer.music.pause()
+        if keys[K_SPACE]:
+            mixer.music.unpause()
     return "select"
 
 
