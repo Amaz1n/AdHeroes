@@ -14,9 +14,8 @@ GODOWN=3#boolean if going down
 DOUBLE=4#boolean if double jump available
 p1=[600,520,0,True,True,True]#player 1
 p2=[300,520,0,True,True,True]#player 2
-musiclist=["firstmap.mp3","select.mp3","secondmap.mp3"]
-mapmusic=["firstmap.mp3","secondmap.mp3"]
-shootsound=["slimeshoot.mp3"]
+musiclist=["menusong.mp3","select.mp3","secondmap.mp3","winnersong.mp3"]
+mapmusic=["firstmap.mp3","secondmap.mp3","thirdmap.mp3"]
 volume=0.3
 v=[10,0]#the horiz and vert speed of the bullet
 myClock=time.Clock()
@@ -26,7 +25,7 @@ meleeDmg=[7,8,10,13] #damage values for basic melee, stick, french fry, mcsword
 realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
 
 def menu():#main menu
-    mixer.music.load(musiclist[1])
+    mixer.music.load(musiclist[0])
     mixer.music.play(-1)
     running = True#game running
     myClock = time.Clock()#clock
@@ -205,8 +204,8 @@ def select():
     return "menu"
 
 def instructions():
-##    mixer.music.load(musiclist[2])
-##    mixer.music.play(-1)
+    mixer.music.load(musiclist[2])
+    mixer.music.play(-1)
     running = True
     instruction=image.load("instructions.png") #load picture
     while running:
@@ -225,8 +224,8 @@ def instructions():
     return "menu"
 
 def credit():
-##    mixer.music.load(musiclist[2])
-##    mixer.music.play(-1)
+    mixer.music.load(musiclist[2])
+    mixer.music.play(-1)
     creditPic=image.load("credits.png")
     running = True
     while running:
@@ -248,6 +247,8 @@ def end(winner):
     courierFont1=font.SysFont("Courier New",30)
     winnerimage=image.load("champion.png")
     backimage=image.load("cool screen.png")
+    mixer.music.load(musiclist[4])
+    mixer.music.play(-1)
     running = True
     while running:
         for evnt in event.get():
@@ -458,7 +459,7 @@ def moveGuy2(pr,cha):
             pr[Y]+=4
     else:
         frame2=0 #0 is the "idle" frame (standing pose)
-    maxrapid=7
+    maxrapid=20
     if rapid==maxrapid:
         if keys[K_c] :#melee
             rapid=0
@@ -1026,7 +1027,7 @@ def game():
     keyboard2=["right"]
     p1=[600,520,0,True,True,True]
     p2=[300,520,0,True,True,True]
-    mixer.music.load(musiclist[mapPos])
+    mixer.music.load(mapmusic[mapPos])
     mixer.music.play(-1)
     while running:
         for evnt in event.get():
