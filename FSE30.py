@@ -404,7 +404,7 @@ def moveGuy1(pr,cha):
     elif pr[VY]>=0:#going down
         pr[GODOWN]=True
     pr[Y]+=pr[VY]
-    if pr[Y]>=520:
+    if pr[Y]>=520:#ground level
         pr[Y]=520
         pr[VY]=0
         pr[GODOWN]=True
