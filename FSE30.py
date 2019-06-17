@@ -168,7 +168,7 @@ def select():#select function
                 screen.blit(p1text,(10,125))#blit text
                 if player1=="Robot":
                     chapos1=0#pos for character list
-                elif player1=="fries":
+                elif player1=="Fries":
                     chapos1=1#pos for character list
                 elif player1=="Recycle bin":
                     chapos1=2#pos for character list
@@ -296,11 +296,9 @@ def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):#draw the sc
     for b in bull2:
         screen.blit(bulletimage[chapos2],(int(b[0]),int(b[1])))#blit bullet image for player 2
     pic1=picList1[move1][int(frame1)]#bring player 1 character
-    pic2=picList2[move2][int(frame2)]#bring player 2 characer
-    
+    pic2=picList2[move2][int(frame2)]#bring player 2 character
     screen.blit(pic1,(p1[X],p1[Y]))#blit player 1
     screen.blit(pic2,(p2[X],p2[Y]))#blit player 2
-    
     myClock.tick(60)
     display.flip()
 
@@ -318,16 +316,16 @@ def moveGuy1(pr,cha):
     keys=key.get_pressed()
     maxrapid11=7#maxrapid for melee
     if keys[K_UP] and pr[GODOWN] and pr[DOUBLE]:#jump straight
-        newMove=3
-        pr[VY]=-12
+        newMove=3#straight jump
+        pr[VY]=-12#move up
         if pr[Y]<520:
             pr[DOUBLE]=False
-    if keys[K_DOWN]:
-        newMove=0
+    if keys[K_DOWN]:#go down
+        newMove=0#move1=0
         pr[Y]+=10
-    if keys[K_LEFT] and pr[X]>=0:
-        if pr[Y]<520:
-            newMove=4
+    if keys[K_LEFT] and pr[X]>=0:#go left
+        if pr[Y]<520:#when the player jump
+            newMove=4#jump left
         else:
             newMove=1
         pr[X]-=6
@@ -337,7 +335,7 @@ def moveGuy1(pr,cha):
         if keys[K_LEFTBRACKET] and rapid11==maxrapid11:
             newMove=6
             rapid11=0#make melee rapid 0
-    elif keys[K_RIGHT] and pr[X]<=986:
+    elif keys[K_RIGHT] and pr[X]<=986:#go right
         if pr[Y]<520:
             newMove=5
         else:
@@ -1056,6 +1054,7 @@ def game():
     p1=[600,520,0,True,True,True]
     p2=[300,520,0,True,True,True]
     #######
+    print(chapos1,chapos2)
     mixer.music.load(mapmusic[mapPos])#load music for the map
     mixer.music.play(-1)#play music
     while running:
