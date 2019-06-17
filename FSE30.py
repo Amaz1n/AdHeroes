@@ -21,9 +21,6 @@ mapmusic=["firstmap.mp3","secondmap.mp3","thirdmap.mp3"]
 volume=0.3
 v=[10,0]#the horiz and vert speed of the bullet
 myClock=time.Clock()
-rangeDmg=[5,7,7,10,12,20] #damage values for basic ranged ability, pistol,
-                          #space gun, throwing away gun, rifle, and sniper
-meleeDmg=[7,8,10,13] #damage values for basic melee, stick, french fry, mcsword
 realmap=[image.load("wcdonalds.png"),image.load("animeback.png"),image.load("roboYardBack.png")]# add real size map
 
 def menu():#main menu
@@ -87,7 +84,7 @@ def select():#select function
     back3=image.load("back3.png")#load back3 (icon-sized background), default map
     mapList=[image.load("back1.png"),image.load("back2.png"),transform.scale(back3,(500,200))]#map icon list
     screen.fill((30,30,24))#solid background colour
-    chaList=["Robot","Mcman","Recycle bin","Slime"]#character names
+    chaList=["Robot","Fries","Recycle bin","Slime"]#character names
     selectbox=[Rect(x*120+290,510,100,100) for x in range(4)]#boxes for character selection
     for i in range(len(selectbox)):#draw the boxes
         draw.rect(screen,(150,100,200),selectbox[i])
@@ -171,7 +168,7 @@ def select():#select function
                 screen.blit(p1text,(10,125))#blit text
                 if player1=="Robot":
                     chapos1=0#pos for character list
-                elif player1=="Mcman":
+                elif player1=="fries":
                     chapos1=1#pos for character list
                 elif player1=="Recycle bin":
                     chapos1=2#pos for character list
@@ -185,7 +182,7 @@ def select():#select function
                 screen.blit(p2text,(10,165))#blit text
                 if player2=="Robot":
                     chapos2=0#pos for character list
-                elif player2=="Mcman":
+                elif player2=="Fries":
                     chapos2=1#pos for character list
                 elif player2=="Recycle bin":
                     chapos2=2#pos for character list
@@ -280,12 +277,16 @@ def end(winner):#end page (winner page)
 
 bulletimage=[image.load("robotBullet.png"),image.load("mcBullet.png"),image.load("recycleBullet.png"),image.load("slimeBullet.png")]#characters' bullet image
 def drawScene(screen,picList1,picList2,health1,health2,bull1,bull2):#draw the scene
-    global mapPos,chapos1,chapos2,p1
+    global mapPos,chapos1,chapos2,player1,player2
     screen.blit(realmap[mapPos],(0,0))#blit the map image
     p1text=courierFont.render("Player 1",True,(0,0,0))#player 1 text
     p2text=courierFont.render("Player 2",True,(0,0,0))#player 2 text
+    p1chatext=courierFont.render(player1,True,(0,0,0))
+    p2chatext=courierFont.render(player2,True,(0,0,0))
     screen.blit(p2text,(50,10))#blit text
-    screen.blit(p1text,(850,10))#blit text
+    screen.blit(p1text,(630,10))#blit text
+    screen.blit(p1chatext,(770,10))
+    screen.blit(p2chatext,(190,10))
     draw.rect(screen,(255,0,0),(30,50,400,30))#red  
     draw.rect(screen,(0,255,0),(30,50,health2/100*400,30))#green
     draw.rect(screen,(255,0,0),(590,50,400,30))#red
@@ -367,8 +368,8 @@ def moveGuy1(pr,cha):
                     bullets1.append([pr[X]+5,pr[Y]+25,v[0],v[1],keyboard1[-1]])#append bullet to bullets list
                 if keyboard1[-1]=="right":#facing right
                     bullets1.append([pr[X]+50,pr[Y]+25,v[0],v[1],keyboard1[-1]])#append bullet to bullets list
-        if cha=="mcman":
-            MAXRAPID1=12#maxrapid for mcman
+        if cha=="fries":
+            MAXRAPID1=12#maxrapid for fries
             if rapid1==MAXRAPID1:#player can shoot
                 rapid1=0#make shooting rapid 0
                 if keyboard1[-1]=="left":#facing left
@@ -478,7 +479,7 @@ def moveGuy2(pr,cha):
     else:
         frame2=0 #0 is the "idle" frame (standing pose)
         
-    if keys[K_v]:#ranged
+    if keys[K_v]:#shooting
         if cha=="robot":
             MAXRAPID2=24#maxrapid for robot
             if rapid2==MAXRAPID2:#player can shoot
@@ -487,8 +488,8 @@ def moveGuy2(pr,cha):
                     bullets2.append([pr[X]+5,pr[Y]+25,v[0],v[1],keyboard2[-1]])#append bullet to bullets list
                 if keyboard2[-1]=="right":#facing right
                     bullets2.append([pr[X]+50,pr[Y]+25,v[0],v[1],keyboard2[-1]])#append bullet to bullets list
-        if cha=="mcman":
-            MAXRAPID2=12#maxrapid for mcman
+        if cha=="fries":
+            MAXRAPID2=12#maxrapid for fries
             if rapid2==MAXRAPID2:#player can shoot
                 rapid2=0#make shooting rapid 0
                 if keyboard2[-1]=="left":#facing left
@@ -556,7 +557,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
                     health2-=16#damage to player2
-            if cha2=="mcman":
+            if cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
@@ -571,14 +572,14 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
                     health2-=16#damage to player2
-        if cha1=="mcman":#mcman
+        if cha1=="fries":#fries
             bulletrect=Rect(b[X],b[Y],16,16)#rect for bullet
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#enemy rect
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
                     health2-=8#damage to player2
-            if cha2=="mcman":
+            if cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
@@ -600,7 +601,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
                     health2-=5#damage to player2
-            if cha2=="mcman":
+            if cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
@@ -622,7 +623,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
                     health2-=2#damage to player2
-            if cha2=="mcman":
+            if cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer2):#check the bullet hits the enemy
                     bull1.remove(b)#remove the bullet that hit the enemy
@@ -645,7 +646,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
                     health1-=16#damage to player1
-            if cha1=="mcman":
+            if cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
@@ -660,14 +661,14 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
                     health1-=16#damage to player1
-        if cha2=="mcman":#mcman
+        if cha2=="fries":#fries
             bulletrect=Rect(b[X],b[Y],16,16)#rect for bullet
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#enemy rect
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
                     health1-=8#damage to player1
-            if cha1=="mcman":
+            if cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
@@ -689,7 +690,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
                     health1-=5#damage to player1
-            if cha1=="mcman":
+            if cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
@@ -711,7 +712,7 @@ def checkHit(bull1,bull2,pr1,pr2,cha1,cha2):
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
                     health1-=2#damage to player1
-            if cha1=="mcman":
+            if cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#enemy rect
                 if bulletrect.colliderect(inplayer1):#check the bullet hits the enemy
                     bull2.remove(b)#remove the bullet that hit the enemy
@@ -739,7 +740,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p1[X],p1[Y]+27,20,10)#melee area for robot
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -752,7 +753,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p1[X]+44,p1[Y]+27,20,10)#melee area for robot
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -761,12 +762,12 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             if meleerect.colliderect(inplayer2) and rapidmelee1==maxrapid1:#check the melee hits the player2
                 rapidmelee1=0#make melee rapid 0
                 health2=health2-5#damage to player2
-    elif cha1=="mcman" and frame1!=0:
+    elif cha1=="fries" and frame1!=0:
         if move1==6:#facing left
-            meleerect=Rect(p1[X]-2,p1[Y]+37,18,10)#melee area for mcman
+            meleerect=Rect(p1[X]-2,p1[Y]+37,18,10)#melee area for fries
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -776,10 +777,10 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
                 rapidmelee1=0#make melee rapid 0
                 health2=health2-5#damage to player2
         if move1==7:#facing right
-            meleerect=Rect(p1[X]+49,p1[Y]+37,16,10)#melee area for mcman
+            meleerect=Rect(p1[X]+49,p1[Y]+37,16,10)#melee area for fries
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -793,7 +794,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p1[X],p1[Y]+27,20,10)#melee area for recyclebin
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -806,7 +807,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p1[X]+44,p1[Y]+27,20,10)#melee area for recyclebin
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -820,7 +821,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p1[X],p1[Y]+20,20,20)#melee area for slime
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -833,7 +834,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X]+44,p2[Y]+27,18,20)#melee area for slime
             if cha2=="robot":
                 inplayer2=Rect(p2[X]+18,p2[Y]+12,27,54)#rect player 2
-            elif cha2=="mcman":
+            elif cha2=="fries":
                 inplayer2=Rect(p2[X]+10,p2[Y]+10,50,55)#rect player 2
             elif cha2=="recyclebin":
                 inplayer2=Rect(p2[X]+5,p2[Y]+10,60,55)#rect player 2
@@ -848,7 +849,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X],p2[Y]+27,20,10)#melee area for robot
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -861,7 +862,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X]+44,p2[Y]+27,20,10)#melee area for robot
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -870,12 +871,12 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             if meleerect.colliderect(inplayer1) and rapidmelee2==maxrapid2:#check the melee hits the player1
                 rapidmelee2=0#make melee rapid 0
                 health1=health1-5#damage to player1
-    if cha2=="mcman" and frame2!=0:#mcman
+    if cha2=="fries" and frame2!=0:#fries
         if move2==6:#facing left
-            meleerect=Rect(p2[X]-2,p2[Y]+37,18,10)#melee area for mcman
+            meleerect=Rect(p2[X]-2,p2[Y]+37,18,10)#melee area for fries
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -885,10 +886,10 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
                 rapidmelee2=0#make melee rapid 0
                 health1=health1-5#damage to player1
         if move2==7:#facing right
-            meleerect=Rect(p2[X]+49,p2[Y]+37,16,10)#melee area for mcman
+            meleerect=Rect(p2[X]+49,p2[Y]+37,16,10)#melee area for fries
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -902,7 +903,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X],p2[Y]+27,20,10)#melee area for recyclebin
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -915,7 +916,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X]+44,p2[Y]+27,18,20)#melee area for recyclebin
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -929,7 +930,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X],p2[Y]+20,20,20)#melee area for slime
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -942,7 +943,7 @@ def checkHitmelee(pr1,pr2,cha1,cha2):
             meleerect=Rect(p2[X]+44,p2[Y]+27,20,10)#melee area for slime
             if cha1=="robot":
                 inplayer1=Rect(p1[X]+18,p1[Y]+12,27,54)#rect player 1
-            elif cha1=="mcman":
+            elif cha1=="fries":
                 inplayer1=Rect(p1[X]+10,p1[Y]+10,50,55)#rect player 1
             elif cha1=="recyclebin":
                 inplayer1=Rect(p1[X]+5,p1[Y]+10,60,55)#rect player 1
@@ -996,18 +997,18 @@ robotpics.append(addPics("robotMeleeL",0,1))#hit left
 robotpics.append(addPics("robotMeleeR",0,1))#hit right
 robotpics.append(addPics("robotShootL",0,1))#shoot left
 robotpics.append(addPics("robotShootR",0,1))#shoot right
-#mcman picture list
-mcman=[]
-mcman.append(addPics("mcdsIdle",0,1))#forward
-mcman.append(addPics("mcdsWalkL",0,11))#left
-mcman.append(addPics("mcdsWalkR",0,11))#right
-mcman.append(addPics("mcdsJumpF",3,4))#jump 
-mcman.append(addPics("mcdsJumpL",0,5))#jump left
-mcman.append(addPics("mcdsJumpR",0,5))#jump right
-mcman.append(addPics("mcdsMeleeL",0,1))#hit left
-mcman.append(addPics("mcdsMeleeR",0,1))#hit right
-mcman.append(addPics("mcdsShootL",0,1))#shoot left
-mcman.append(addPics("mcdsShootR",0,1))#shoot right
+#fries picture list
+fries=[]
+fries.append(addPics("mcdsIdle",0,1))#forward
+fries.append(addPics("mcdsWalkL",0,11))#left
+fries.append(addPics("mcdsWalkR",0,11))#right
+fries.append(addPics("mcdsJumpF",3,4))#jump 
+fries.append(addPics("mcdsJumpL",0,5))#jump left
+fries.append(addPics("mcdsJumpR",0,5))#jump right
+fries.append(addPics("mcdsMeleeL",0,1))#hit left
+fries.append(addPics("mcdsMeleeR",0,1))#hit right
+fries.append(addPics("mcdsShootL",0,1))#shoot left
+fries.append(addPics("mcdsShootR",0,1))#shoot right
 #recyclebin picture list
 recyclebin=[]
 recyclebin.append(addPics("binIdleF",0,1))#forward
@@ -1032,10 +1033,10 @@ slime.append(addPics("slimeMeleeL",0,1))#hit left
 slime.append(addPics("slimeMeleeR",0,1))#hit right
 slime.append(addPics("slimeShootL",0,1))#shoot left
 slime.append(addPics("slimeShootR",0,1))#shoot right
-pics1=[robotpics,mcman,recyclebin,slime]#pics list for player1
-pics2=[robotpics,mcman,recyclebin,slime]#pics list for player2
+pics1=[robotpics,fries,recyclebin,slime]#pics list for player1
+pics2=[robotpics,fries,recyclebin,slime]#pics list for player2
 
-charlist=["robot","mcman","recyclebin","slime"]#characters list
+charlist=["robot","fries","recyclebin","slime"]#characters list
 
 
 def game():
